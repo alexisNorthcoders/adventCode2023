@@ -1,7 +1,7 @@
 const fs = require('fs');
 
 function calculatePossibleOutcomes(lines){
-    const regex = /([0-9]{1,}) (blue)|([0-9]{1,}) (red)|([0-9]{1,}) (green)/g
+    const regex = /(\d+) (red|blue|green)/g
     let validSets = []
     lines.forEach((line) => {
         const games = line.split(";")
@@ -10,8 +10,7 @@ function calculatePossibleOutcomes(lines){
         let red = []
         games.forEach((set) => {
             const sets = set.matchAll(regex)
-             for (const set of sets) {
-                const cubes = set.filter((a) => (a !== undefined))      
+             for (const cubes of sets) {
                 if (cubes[2]==="green") {green.push(cubes[1])}
                 if (cubes[2]==="red") {red.push(cubes[1])}
                 if (cubes[2]==="blue") {blue.push(cubes[1])}
