@@ -1,22 +1,20 @@
 const fs = require('fs');
 
 function calculatePossibleOutcomes(lines){
-    const regex = /([0-9]{1,}) (blue)|([0-9]{1,}) (red)|([0-9]{1,}) (green)/g
+    const regex = /(\d+) (red|blue|green)/g
     let validSets = []
     lines.forEach((line,index) => {
         const sets = line.split(";")
         let booleanSet = true
         sets.forEach((set) => {
-            const matched = set.matchAll(regex)
-             for (const match of matched) {
-                const clear = match.filter((a) => (a !== undefined))
-                console.log(clear,index)
+            const sets = set.matchAll(regex)
+             for (const cubes of sets) {
                 let green = 0
                 let blue = 0
                 let red = 0
-                if (clear[2]==="green") {green = clear[1]}
-                if (clear[2]==="red") {red = clear[1]}
-                if (clear[2]==="blue") {blue = clear[1]}
+                if (cubes[2]==="green") {green = cubes[1]}
+                if (cubes[2]==="red") {red = cubes[1]}
+                if (cubes[2]==="blue") {blue = cubes[1]}
                 if ( green > 13 || red > 12 || blue > 14) {                
                     booleanSet = false }                          
             }
