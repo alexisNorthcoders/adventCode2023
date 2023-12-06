@@ -1,7 +1,7 @@
 const fs = require('fs');
 
 function sumOfPartNumbers(lines){
-    const regex = /[^a-zA-Z0-9.]/g
+    const regex = /[*]/g
     const regexNumbers = /(\d+)/g
 const symbolCoords = []
 const numberCoords = []
@@ -14,10 +14,29 @@ lines.forEach((line,index) => {
         if (regex.test(line[i])) symbolCoords.push({x: i,y:index})
     }
 } )
+const adjacentNumbers =[]
+for (let i=0;i<numberCoords.length;i++){
+    for (let j=0;j<symbolCoords.length;j++){
+        if (checkAdjacent(numberCoords[i],symbolCoords[j])) { adjacentNumbers.push({number:numberCoords[i] , symbol: symbolCoords[j] }) 
+        }}
+    }
 
-const adjacentNumbers = numberCoords.filter(number => symbolCoords.some(symbol => checkAdjacent(number,symbol)))
+const groupedBySymbol = adjacentNumbers.reduce((grouped, item) => {
+    const symbolXY = `${item.symbol.x}x ${item.symbol.y}y`;
+        if (!grouped[symbolXY]) {
+          grouped[symbolXY] = [];
+        }
+        grouped[symbolXY].push(Number(item.number.number)); 
+        return grouped;
+      }, {});
+      
+const multipliedNumbers = Object.values(groupedBySymbol)
+        .filter(adjacents => adjacents.length === 2) 
+        .map(adjacents => adjacents.reduce((a, b) => a * b, 1)); 
+      
+  
 
-return adjacentNumbers.reduce((a, b) => a + parseInt(b.number),0)
+return multipliedNumbers.reduce((a,b) => a+b,0)
 
 }
 
@@ -37,5 +56,5 @@ fs.readFile('inputday3.txt', 'utf8', (err, data) => {
     }
     const lines = data.split('\n');
     const result = sumOfPartNumbers(lines);
-    console.log("Sum of Adjacent Numbers:", result);
+    console.log("Sum of Powers:", result);
 });
