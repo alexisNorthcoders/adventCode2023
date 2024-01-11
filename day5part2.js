@@ -1,4 +1,5 @@
 const fs = require('fs');
+const fsp = require('fs/promises')
 fs.readFile('inputday5.txt', 'utf8', (err, data) => {
     if (err) {
       console.error('Error reading the file:', err);
@@ -8,7 +9,7 @@ fs.readFile('inputday5.txt', 'utf8', (err, data) => {
     console.log("Lowest Location:", result); 
 });
 
-function fertilizer(lines){
+async function fertilizer(lines){
     //parsing data into variables
     const splitting = lines.split("map:")
     const parsedText = splitting.map(text => text.trim().split("\n") )
@@ -22,12 +23,31 @@ function fertilizer(lines){
     const humidityToLocation = parsedText[7].map(element => element.split(" "))
     
 
-    const seedFinalDestination = [] 
+    let seedFinalDestination = Infinity
     const mapsArray = [seedToSoil, soilToFertilizer, fertilizerToWater,waterToLight,
         lightToTemperature,temperatureToHumidity,humidityToLocation]
-
-    for (let i = 0; i < seeds.length; i++) {
-        let tempCoords = Number(seeds[i])
+        const fileName = "resultsday5.txt"     
+   await fsp.writeFile(fileName,"", (err) => {
+    if (err) console.log(err);
+   
+  })
+      
+    for (let i = 0; i < seeds.length; i+=2) {
+       const date =String(new Date()) + "\n"
+       const seed =String(seeds[i]) + "\n"
+       
+      await fsp.appendFile(fileName, date, (err) => {
+        if (err) console.log(err);
+       
+      });
+      await fsp.appendFile(fileName, seed, (err) => { 
+            if (err) { 
+              console.log(err); 
+            }  
+          })
+        for (let l=0;l<Number(seeds[i+1]);l++){
+            let tempCoords = Number(seeds[i])+l
+        
         for (let j = 0; j < mapsArray.length; j++) {
             for (let k = 0; k< mapsArray[j].length;k++){
                 let subArray = mapsArray[j][k]
@@ -37,8 +57,16 @@ function fertilizer(lines){
                  }
                }
            }
-        seedFinalDestination.push(tempCoords)
-    }
-    seedFinalDestination.sort((a, b) => a - b)
-    return seedFinalDestination[0]
+
+           if (tempCoords < seedFinalDestination) { 
+            console.log(tempCoords)
+           await fsp.appendFile("resultsday5.txt", JSON.stringify("Lowest location: "+tempCoords,"\n"), (err) => { 
+                if (err) { 
+                  console.log(err)}})
+            seedFinalDestination = tempCoords }
+        
+    }}
+    
+    console.log(new Date())
+    return seedFinalDestination
 }
