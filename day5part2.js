@@ -1,50 +1,34 @@
 const fs = require('fs');
 const fsp = require('fs/promises');
-fs.readFile('inputday5.txt', 'utf8', (err, data) => {
-  if (err) {
-    console.error('Error reading the file:', err);
-    return;
-  }
-  const result = fertilizer(data);
-  console.log("Lowest Location:", result);
+fsp.readFile('inputday5.txt', 'utf8').then((data) => {
+
+  //parsing data into variables
+  const parsedText = data.split("map:").map(text => text.trim().split("\n"));
+
+  const parsedData = {
+    seeds: parsedText[0][0].split(" ").slice(1),
+    seedToSoil: parsedText[1].slice(0, -2).map(element => element.split(" ")),
+    soilToFertilizer: parsedText[2].slice(0, -2).map(element => element.split(" ")),
+    fertilizerToWater: parsedText[3].slice(0, -2).map(element => element.split(" ")),
+    waterToLight: parsedText[4].slice(0, -2).map(element => element.split(" ")),
+    lightToTemperature: parsedText[5].slice(0, -2).map(element => element.split(" ")),
+    temperatureToHumidity: parsedText[6].slice(0, -2).map(element => element.split(" ")),
+    humidityToLocation: parsedText[7].map(element => element.split(" "))
+  };
+
+  fertilizer(...Object.values(parsedData))
+    .then((result) => console.log("Lowest Location:", result));
+
 });
 
-async function fertilizer(lines) {
-  //parsing data into variables
-  const splitting = lines.split("map:");
-  const parsedText = splitting.map(text => text.trim().split("\n"));
-  const seeds = parsedText[0][0].split(" ").slice(1);
-  const seedToSoil = parsedText[1].slice(0, -2).map(element => element.split(" "));
-  const soilToFertilizer = parsedText[2].slice(0, -2).map(element => element.split(" "));
-  const fertilizerToWater = parsedText[3].slice(0, -2).map(element => element.split(" "));
-  const waterToLight = parsedText[4].slice(0, -2).map(element => element.split(" "));
-  const lightToTemperature = parsedText[5].slice(0, -2).map(element => element.split(" "));
-  const temperatureToHumidity = parsedText[6].slice(0, -2).map(element => element.split(" "));
-  const humidityToLocation = parsedText[7].map(element => element.split(" "));
-
+async function fertilizer(seeds, seedToSoil, soilToFertilizer, fertilizerToWater, waterToLight, lightToTemperature, temperatureToHumidity, humidityToLocation) {
 
   let seedFinalDestination = Infinity;
   const mapsArray = [seedToSoil, soilToFertilizer, fertilizerToWater, waterToLight,
     lightToTemperature, temperatureToHumidity, humidityToLocation];
-  const fileName = "resultsday5.txt";
-  await fsp.writeFile(fileName, "", (err) => {
-    if (err) console.log(err);
-
-  });
 
   for (let i = 0; i < seeds.length; i += 2) {
-    const date = String(new Date()) + "\n";
-    const seed = String(seeds[i]) + "\n";
 
-    await fsp.appendFile(fileName, date, (err) => {
-      if (err) console.log(err);
-
-    });
-    await fsp.appendFile(fileName, seed, (err) => {
-      if (err) {
-        console.log(err);
-      }
-    });
     for (let l = 0; l < Number(seeds[i + 1]); l++) {
       let tempCoords = Number(seeds[i]) + l;
 
@@ -57,20 +41,10 @@ async function fertilizer(lines) {
           }
         }
       }
-
       if (tempCoords < seedFinalDestination) {
-        console.log(tempCoords);
-        await fsp.appendFile("resultsday5.txt", JSON.stringify("Lowest location: " + tempCoords, "\n"), (err) => {
-          if (err) {
-            console.log(err);
-          }
-        });
         seedFinalDestination = tempCoords;
       }
-
     }
   }
-
-  console.log(new Date());
   return seedFinalDestination;
 }
