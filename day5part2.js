@@ -1,5 +1,8 @@
+const e = require('express');
 const fs = require('fs');
 const fsp = require('fs/promises');
+
+
 fsp.readFile('inputday5.txt', 'utf8').then((data) => {
 
   //parsing data into variables
@@ -20,6 +23,18 @@ fsp.readFile('inputday5.txt', 'utf8').then((data) => {
     .then((result) => console.log("Lowest Location:", result));
 
 });
+function createRange(destination, source, length) {
+
+  destination = Number(destination);
+  source = Number(source);
+  length = Number(length);
+
+  const entryRange = [source, source + length - 1];
+  const exitRange = [destination, destination + length - 1];
+  return { entryRange, exitRange };
+
+}
+
 
 async function fertilizer(seeds, seedToSoil, soilToFertilizer, fertilizerToWater, waterToLight, lightToTemperature, temperatureToHumidity, humidityToLocation) {
 
@@ -27,23 +42,30 @@ async function fertilizer(seeds, seedToSoil, soilToFertilizer, fertilizerToWater
   const mapsArray = [seedToSoil, soilToFertilizer, fertilizerToWater, waterToLight,
     lightToTemperature, temperatureToHumidity, humidityToLocation];
 
-  for (let i = 0; i < seeds.length; i += 2) {
+  const [seedToSoilRanges, soilToFertilizerRanges, fertilizerToWaterRanges, waterToLightRanges, lightToTemperatureRanges, temperatureToHumidityRanges, humidityToLocationRanges] = mapsArray.map((map) => map.map((item) => createRange(...item)));
 
+  const rangesArray = [seedToSoilRanges, soilToFertilizerRanges, fertilizerToWaterRanges, waterToLightRanges, lightToTemperatureRanges, temperatureToHumidityRanges, humidityToLocationRanges];
+
+
+
+  for (let i = 0; i < seeds.length; i += 2) {
+    console.log(seeds[i])
     for (let l = 0; l < Number(seeds[i + 1]); l++) {
       let tempCoords = Number(seeds[i]) + l;
-
-      for (let j = 0; j < mapsArray.length; j++) {
-        for (let k = 0; k < mapsArray[j].length; k++) {
-          let subArray = mapsArray[j][k];
-          if (tempCoords >= Number(subArray[1]) && tempCoords <= Number(subArray[1]) + Number(subArray[2])) {
-            tempCoords = Number(subArray[0]) - Number(subArray[1]) + tempCoords;
-            k = mapsArray[j].length;
-          }
-        }
+      rangesArray.forEach((range) => {
+        let rangeSwitch = true
+        range.forEach((range) => {
+          if (rangeSwitch && tempCoords >= range.entryRange[0] && tempCoords <= range.entryRange[1]) {
+            tempCoords += range.exitRange[0] - range.entryRange[0];
+            rangeSwitch = false
+            }
+        });
+      });
+      if (tempCoords < seedFinalDestination){
+        seedFinalDestination = tempCoords
+        console.log(seedFinalDestination)
       }
-      if (tempCoords < seedFinalDestination) {
-        seedFinalDestination = tempCoords;
-      }
+      
     }
   }
   return seedFinalDestination;
