@@ -107,6 +107,7 @@ Part 1:
 - For each race, calculate all possible distances.
 - Count all distances higher than the record.
 - Return all counts multiplied with each other.
+
 Part 2:
 // bruteforce solution, takes some seconds to solve
 - Parse data to extract race distance record and race time limit.
