@@ -1,6 +1,6 @@
 # adventCode2023
 
-This is the first time me trying this challenge.
+This is the first time I'm trying this challenge.
 
 Advent of Code is an Advent calendar of small programming puzzles for a variety of skill sets and skill levels that can be solved in any programming language you like.
 
