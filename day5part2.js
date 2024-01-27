@@ -1,5 +1,3 @@
-const e = require('express');
-const fs = require('fs');
 const fsp = require('fs/promises');
 
 
@@ -46,17 +44,13 @@ async function fertilizer(seeds, seedToSoil, soilToFertilizer, fertilizerToWater
 
   const [seedToSoilRanges, soilToFertilizerRanges, fertilizerToWaterRanges, waterToLightRanges, lightToTemperatureRanges, temperatureToHumidityRanges, humidityToLocationRanges] = mapsArray.map((map) => map.map((item) => createRange(...item)));
 
+const rangesArray = [seedToSoilRanges, soilToFertilizerRanges, fertilizerToWaterRanges, waterToLightRanges, lightToTemperatureRanges, temperatureToHumidityRanges, humidityToLocationRanges];
 
-  const seedsRange = [{ exitRange: [Number(seeds[0]), Number(seeds[1])] }];
+  rangesArray.forEach((range) => sortByEntryRange(range));
 
-  const rangesArray = [seedToSoilRanges, soilToFertilizerRanges, fertilizerToWaterRanges, waterToLightRanges, lightToTemperatureRanges, temperatureToHumidityRanges, humidityToLocationRanges];
-
-  rangesArray.forEach((range) => sortByEntryRange(range)); // sort ranges
-  // console.dir(rangesArray,{ depth: null })
 
 
   for (let i = 0; i < seeds.length; i += 2) {
-    console.log(seeds[i]);
     for (let l = 0; l < Number(seeds[i + 1]); l++) {
       let tempCoords = Number(seeds[i]) + l;
       rangesArray.forEach((range) => {
@@ -70,45 +64,37 @@ async function fertilizer(seeds, seedToSoil, soilToFertilizer, fertilizerToWater
       });
       if (tempCoords < seedFinalDestination) {
         seedFinalDestination = tempCoords;
-        console.log(seedFinalDestination);
       }
-
     }
   }
   return seedFinalDestination;
 }
 
 
-function splitRanges(sourceRange, destinationRange) {
- 
-  let newExit1 =[]
-  let newExit2 = []
-  let newEntry1 = []
-  let newEntry2 = []
-  sourceRange.forEach((range)=> {
+function splitRanges(RangeA, RangeB) {
+  let RangeC = [];
+  let start = RangeA[0].exitRange[0];
+  let end = RangeA[0].exitRange[1];
 
-    if (range.exitRange[1]>destinationRange[0].entryRange[0]){
-      
-      newExit1.push(range.exitRange[0])
-      newExit1.push(destinationRange[0].entryRange[0] -1) 
-      newExit2.push(destinationRange[0].entryRange[0] )
-      newExit2.push(range.exitRange[1]) 
-
-      newEntry1.push(range.entryRange[0])
-      newEntry1.push(range.entryRange[1]) 
-      newEntry2.push(range.entryRange[0])
-      newEntry2.push(range.entryRange[1]) 
-
+  for (let i = 0; i < RangeB.length; i++) {
+    let currentRange = RangeB[i].entryRange;
+    if (start < currentRange[0]) {
+      RangeC.push({ exitRange: [start, currentRange[0] - 1] });
     }
-
-})
-sourceRange.pop()
-sourceRange.push({entryRange:newEntry1,exitRange:newExit1})
-sourceRange.push({entryRange:newEntry2,exitRange:newExit2})
-
+    RangeC.push({ exitRange: currentRange });
+    start = currentRange[1] + 1;
+  }
+  if (start <= end) {
+    RangeC.push({ exitRange: [start, end] });
+  }
+  return RangeC;
 }
+const rangeA = [{ entryRange: [0, 0], exitRange: [79, 92] }];
+const rangeB = [
+  { entryRange: [50, 77], exitRange: [52, 79] },
+  { entryRange: [98, 99], exitRange: [50, 51] },
+];
+console.log(splitRanges(rangeA, rangeB));
 // TO DO FIX ENTRYRANGE!!!
-const sourceRange = [{entryRange:[0,6],exitRange:[45,57]}]
-const destinationRange = [{entryRange:[50,97],exitRange:[52,99]}]
-splitRanges(sourceRange,destinationRange)
-console.log("after split", sourceRange )
+
+
