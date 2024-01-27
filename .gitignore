@@ -1,6 +1,1 @@
-input.txt
-inputday2.txt
-inputday3.txt
-inputday4.txt
-inputday5.txt
-inputday6.txt
+input*.txt
