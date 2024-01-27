@@ -38,6 +38,24 @@ def sum_valid_game_ids(game_data):
             sum_of_ids += int(game_id)
     return sum_of_ids
 
+def sum_of_power_of_sets(game_data):
+    total = 0
+    for game_id, subsets in game_data.items():
+        max_color_counts = {"blue":0,"red":0,"green":0}
+        for color in subsets:
+            for key in max_color_counts:
+                count = int(color.get(key,0))
+                max_color_counts[key] = max(max_color_counts[key],count)
+            
+        power_of_colors = 1    
+        for key in max_color_counts:
+            power_of_colors = power_of_colors*max_color_counts[key]
+        total += power_of_colors
+
+    return total
+
+
 file_path = "input/inputday2.txt"
 data_parsed = parse_data(file_path)
 print(f"Sum of valid IDs: {sum_valid_game_ids(data_parsed)}")
+print(f"Sum of the power of sets: {sum_of_power_of_sets(data_parsed)}")
