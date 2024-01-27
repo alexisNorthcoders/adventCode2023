@@ -1,4 +1,9 @@
 import re
+def extract_digits(line):
+    digits = re.findall(r"\d",line)
+    combined_digits = int(f"{digits[0]}{digits[-1]}")
+    return combined_digits
+
 def convert_word_to_digit(word):
     word_to_digit_mapping = {
         'one': 1,
@@ -23,18 +28,19 @@ def extract_number(line):
       
       return int(f"{first_element}{last_element}")
  
-def calculate_calibration(file_path):
+def calculate_calibration(file_path,function):
     calibration = 0
     with open (file_path,"r") as file:
         lines = file.readlines()
         for line in lines:
-            extracted_number = extract_number(line)
+            extracted_number = function(line)
             calibration += extracted_number
             
     return calibration
 
 file_path = "input/inputday1.txt"
-print(f"Sum of Combined Calibration Values: {calculate_calibration(file_path)}")
+print(f"Total Calibration: {calculate_calibration(file_path,extract_digits)}")
+print(f"Sum of Combined Calibration Values: {calculate_calibration(file_path,extract_number)}")
 
 
 
