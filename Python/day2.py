@@ -57,5 +57,5 @@ def sum_of_power_of_sets(game_data):
 
 file_path = "input/inputday2.txt"
 data_parsed = parse_data(file_path)
-print(f"Sum of valid IDs: {sum_valid_game_ids(data_parsed)}")
-print(f"Sum of the power of sets: {sum_of_power_of_sets(data_parsed)}")
+print(f"Part 1 - Sum of valid IDs: {sum_valid_game_ids(data_parsed)}")
+print(f"Part 2 - Sum of the power of sets: {sum_of_power_of_sets(data_parsed)}")

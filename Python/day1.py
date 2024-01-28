@@ -39,8 +39,8 @@ def calculate_calibration(file_path,function):
     return calibration
 
 file_path = "input/inputday1.txt"
-print(f"Total Calibration: {calculate_calibration(file_path,extract_digits)}")
-print(f"Sum of Combined Calibration Values: {calculate_calibration(file_path,extract_number)}")
+print(f"Part 1 - Total Calibration: {calculate_calibration(file_path,extract_digits)}")
+print(f"Part 2 - Total Calibration: {calculate_calibration(file_path,extract_number)}")
 
 
 

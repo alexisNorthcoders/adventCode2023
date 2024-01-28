@@ -30,7 +30,7 @@ function checkAdjacent(number,symbol){
     return false
 }
 
-fs.readFile('inputday3.txt', 'utf8', (err, data) => {
+fs.readFile('../input/inputday3.txt', 'utf8', (err, data) => {
     if (err) {
       console.error('Error reading the file:', err);
       return;
