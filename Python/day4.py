@@ -39,7 +39,7 @@ def scratchcards(parsed_data):
     scratchcards = [1]*len(winning_numbers)
 
     for index,(winning_set, my_set) in enumerate(zip(winning_numbers, my_numbers)):
-        intersection_set_length = len(winning_set.intersection(my_set))
+        intersection_set_length = len(winning_set & my_set)
         for i in range(intersection_set_length):
             scratchcards[index+i+1] += scratchcards[index]
         
