@@ -52,9 +52,21 @@ def sum_of_adjacent(number_coordinates,symbols_coordinates):
                  total += int(number)
                  current_number = number
     return total
-          
+
+def sum_of_gear_ratios(number_coordinates,symbols_coordinates):
+    asterisk_coordinates = {coords: symbol for coords, symbol in symbols_coordinates.items() if symbol == '*'}
+    total = 0
+    for symbol_coords in asterisk_coordinates:
+        adjacent_number = []
+        for num_coords,number in number_coordinates.items():
+            if (check_adjacent(num_coords,symbol_coords)):
+                adjacent_number.append(int(number))
+        if len(adjacent_number) == 2:
+            total += adjacent_number[0] * adjacent_number[1]
+    return total
+
 file_path = "input/inputday3.txt"
 number,symbol = parse_data(file_path)
 
 print(f"Part 1 - Sum of all parts: {sum_of_adjacent(number,symbol)}")
-#print(f"Part 2 - Total Calibration: {calculate_calibration(file_path,extract_number)}")
+print(f"Part 2 - Sum of all gear ratios: {sum_of_gear_ratios(number,symbol)}")
