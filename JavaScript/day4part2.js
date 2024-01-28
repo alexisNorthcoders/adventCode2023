@@ -1,5 +1,5 @@
 const fs = require('fs');
-fs.readFile('inputday4.txt', 'utf8', (err, data) => {
+fs.readFile('../input/inputday4.txt', 'utf8', (err, data) => {
     if (err) {
       console.error('Error reading the file:', err);
       return;
@@ -9,7 +9,6 @@ fs.readFile('inputday4.txt', 'utf8', (err, data) => {
     console.log("Total scratch points:", result); 
 });
 function scratchCards(lines){
-    const winningObject = {}
     const scratchCards = []
     for (let i = 0; i < lines.length; i++) {
         scratchCards[i]= 1
@@ -26,9 +25,8 @@ function scratchCards(lines){
                 counter++
             }
         }
-        winningObject[index+1]= counter
         for (let i=0;i<counter;i++){
-            scratchCards[index+i+1] += 1*scratchCards[index]
+            scratchCards[index+i+1] += scratchCards[index]
         }
     })
     return scratchCards.reduce((a,b)=> a+b)
