@@ -19,7 +19,7 @@ lines.forEach((line: string) => {
 
 })
 
-function findOverlappingRanges(ranges: Ranges) {
+function findFullOverlappingRanges(ranges: Ranges) {
 
     let total = 0
     ranges.first.forEach((group, index) => {
@@ -36,5 +36,23 @@ function findOverlappingRanges(ranges: Ranges) {
     })
     return total
 }
+function findOverlappingRanges(ranges: Ranges) {
 
-console.log("Number of assigments: ", findOverlappingRanges(ranges))
+    let total = 0
+    ranges.first.forEach((group, index) => {
+        const rangeStartA = Number(group[0])
+        const rangeStartB = Number(ranges.second[index][0])
+        const rangeEndA = Number(group[1])
+        const rangeEndB = Number(ranges.second[index][1])
+        if ((rangeEndA >= rangeStartB ) && (rangeStartA <= rangeStartB)) {
+            total++
+        }
+        else if ((rangeEndB >= rangeStartA ) && (rangeStartB <= rangeStartA))  {
+            total++
+        }
+    })
+    return total
+}
+
+console.log("Number of full overlaps: ", findFullOverlappingRanges(ranges))
+console.log("Number of overlaps: ", findOverlappingRanges(ranges))
