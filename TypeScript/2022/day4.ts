@@ -3,10 +3,13 @@ const file = Bun.file(path);
 
 const text: string = await file.text();
 const lines: string[] = text.split("\n")
-
-const ranges = {
-    first: [] as string[][],
-    second: [] as string[][]
+interface Ranges {
+    first: string[][],
+    second: string[][]
+}
+const ranges: Ranges = {
+    first: [],
+    second: []
 }
 
 lines.forEach((line: string) => {
@@ -15,3 +18,23 @@ lines.forEach((line: string) => {
     ranges.second.push(secondElf.split("-"))
 
 })
+
+function findOverlappingRanges(ranges: Ranges) {
+
+    let total = 0
+    ranges.first.forEach((group, index) => {
+        const rangeStartA = Number(group[0])
+        const rangeStartB = Number(ranges.second[index][0])
+        const rangeEndA = Number(group[1])
+        const rangeEndB = Number(ranges.second[index][1])
+        if ((rangeStartA <= rangeStartB) && (rangeEndA >= rangeEndB)) {
+            total++
+        }
+        else if ((rangeStartB <= rangeStartA) && (rangeEndB >= rangeEndA)) {
+            total++
+        }
+    })
+    return total
+}
+
+console.log("Number of assigments: ", findOverlappingRanges(ranges))
