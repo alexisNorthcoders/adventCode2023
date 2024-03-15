@@ -1,11 +1,9 @@
-const path: string = process.argv.includes("sample") ? "./inputs/day2_sample.txt" : "./inputs/day2.txt";
+const path: string = process.argv.includes("sample") ? "./inputs/sample_day2.txt" : "./inputs/day2.txt";
 const file = Bun.file(path);
 
 const text: string = await file.text();
 const lines: string[] = text.split("\n")
 const games: string[][] = lines.map((line) => line.split(" "))
-// A pedra B papel C tesoura
-// X pedra Y papel Z tesoura 
 
 function totalScore(input: string[][]) {
     let total = 0
@@ -29,7 +27,8 @@ function totalScore(input: string[][]) {
         }
     })
     return total
-}function alternateTotalScore(input: string[][]) {
+}
+function alternateTotalScore(input: string[][]) {
     let total = 0
     input.forEach((game) => {
         switch (game[0]) {

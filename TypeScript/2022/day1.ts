@@ -1,4 +1,4 @@
-const path:string = process.argv.includes("sample") ? "./inputs/day1_sample.txt" : "./inputs/day1.txt";
+const path:string = process.argv.includes("sample") ? "./inputs/sample_day1.txt" : "./inputs/day1.txt";
 const file = Bun.file(path);
 
 const text: string = await file.text();
