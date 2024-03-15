@@ -3,10 +3,7 @@ const path = require('path');
 
 function createFiles(dayNumber) {
     const folderPath = path.join(__dirname, 'inputs');
-    if (!fs.existsSync(folderPath)) {
-        fs.mkdirSync(folderPath);
-    }
-
+ 
     const txtFilenames = [`day${dayNumber}.txt`, `sample_day${dayNumber}.txt`];
     const tsFilename = `day${dayNumber}.ts`;
 
@@ -17,9 +14,15 @@ function createFiles(dayNumber) {
     });
 
     const tsFilePath = path.join(__dirname, tsFilename);
-    fs.writeFileSync(tsFilePath, '');
+    fs.writeFileSync(tsFilePath, code);
     console.log(`File created: ${tsFilePath}`);
 }
 
 const dayNumber = process.argv[2];
-createFiles(dayNumber);
+const code = `const path: string = process.argv.includes("sample") ? "./inputs/sample_day${dayNumber}.txt" : "./inputs/day${dayNumber}.txt";
+const file = Bun.file(path);
+
+const text: string = await file.text();
+const lines: string[] = text.split("\\n")`
+
+createFiles(dayNumber,code);
