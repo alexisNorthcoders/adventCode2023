@@ -44,7 +44,7 @@ function findBadgeAndSumPriorities(lines: string[]): number {
     for (let i = 0; i < lines.length; i += 3) {
         const firstElf: any = new Set(lines[i])
         const secondElf: any = new Set(lines[i + 1])
-        const thirdElf = new Set(lines[i + 2])
+        const thirdElf:Set<string> = new Set(lines[i + 2])
         const badge = firstElf.intersection(secondElf.intersection(thirdElf))
         total += getPriorityValue(badge)
     }
