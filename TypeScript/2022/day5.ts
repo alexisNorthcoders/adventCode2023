@@ -37,20 +37,34 @@ for (const column in crates) {
 const reverseMoves = moves.reverse()
 
 function findTopCrateLayer(cratesArray: string[][], moves: number[][]) {
-
+const clonedArray = cratesArray.slice()
     moves.forEach((move) => {
         const numberOfCrates = move[0]
         for (let i = 1; i <= numberOfCrates; i++) {
 
-            const movingTo = cratesArray[move[2] - 1]
-            const crateToMove = cratesArray[move[1] - 1].slice(-1)[0]
+            const movingTo = clonedArray[move[2] - 1]
+            const crateToMove = clonedArray[move[1] - 1].slice(-1)[0]
             crateToMove ? movingTo.push(crateToMove) : null
-            cratesArray[move[1] - 1].pop()
+            clonedArray[move[1] - 1].pop()
 
         }
 
     })
+    return clonedArray.map(((column) => column.slice(-1))).join("")
+}
+function findTopCrateLayerPart2(cratesArray: string[][], moves: number[][]) {
+    moves.forEach((move) => {
+        const numberOfCrates = move[0]
+        const movingTo = cratesArray[move[2] - 1]
+        const cratesToMove = cratesArray[move[1] - 1].slice(-numberOfCrates)
+        cratesToMove.forEach((crate) => {
+            movingTo.push(crate)
+            cratesArray[move[1] - 1].pop()
+        })
+    })
+
     return cratesArray.map(((column) => column.slice(-1))).join("")
 }
 
 console.log("Top Crate Layer: ", findTopCrateLayer(cratesArray, reverseMoves))
+console.log("Top Crate Layer Part 2: ", findTopCrateLayerPart2(cratesArray, reverseMoves))
