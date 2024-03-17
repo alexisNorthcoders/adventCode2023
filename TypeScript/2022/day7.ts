@@ -40,6 +40,20 @@ class Tree {
         });
         return sum;
     }
+    sumFileSizesBF(node: Node): number {
+        let sum = 0;
+        const queue: Node[] = [node];
+
+        while (queue.length > 0) {
+            const currentNode = queue.shift()!;
+            if (currentNode.fileSize < 100000) {
+                sum += currentNode.fileSize;
+            }
+            currentNode.children.forEach(child => queue.push(child));
+        }
+
+        return sum;
+    }
 }
 
 function sumOfTotalSizes(lines: string[]) {
@@ -64,7 +78,13 @@ function sumOfTotalSizes(lines: string[]) {
             }
         }
     }))
-    return fileStructure.sumFileSizes(root)
+    console.time()
+    const totalRecursive = fileStructure.sumFileSizes(root)
+    console.timeEnd()
+    console.time()
+    const totalBF = fileStructure.sumFileSizesBF(root)
+    console.timeEnd()
+    return totalBF
 }
 
 console.log("Sum of Total Directory Size: ", sumOfTotalSizes(lines))
