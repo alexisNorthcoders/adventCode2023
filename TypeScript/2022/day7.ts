@@ -123,7 +123,6 @@ function deleteDirectory(lines: string[]) {
         }
     }))
     const freeSpace = 70000000 - root.fileSize
-    console.log(freeSpace)
     let currentMinimumSize = Infinity
     fileStructure.traverseBF((node: Node) => {
         if (node.fileSize + freeSpace - 30000000 > 0) {
