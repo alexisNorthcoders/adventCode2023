@@ -4,35 +4,67 @@ const file = Bun.file(path);
 const text: string = await file.text();
 const lines: string[] = text.split("\n")
 
+class Node {
+    path: string;
+    children: Node[];
+    fileSize: number;
+    constructor(path: string, fileSize:number = 0) {
+        this.path = path
+        this.children = []
+        this.fileSize = fileSize
+    }
+    add(path: string) {
+        const newNode = new Node(path)
+        this.children.push(newNode)
+        return newNode
+    }
+    addFileSize(size: number) {
+        this.fileSize += size;
+    }
+    getChild(path: string):Node | undefined{
+        return this.children.find(child => child.path === path);
+    }
+}
+class Tree {
+    root:Node
+    constructor() {
+        this.root = new Node("/")
+    }
+    sumFileSizes(node:Node):number {
+        let sum = 0;
+        if (node.fileSize < 100000) {
+            sum += node.fileSize;
+        }
+        node.children.forEach(child => {
+            sum += this.sumFileSizes(child);
+        });
+        return sum;
+    }
+}
+
 function sumOfTotalSizes(lines: string[]) {
-    let total = 0
-    const navigation: string[] = []
-    const fileTree = new Map()
+    const fileStructure = new Tree()
+    const root = fileStructure.root
+    const navigation: Node[] = [root]
+
     lines.forEach(((line) => {
-        if (line.startsWith("$ cd") && !line.startsWith("$ cd ..")) {
+        if (line.startsWith("$ cd") && !line.startsWith("$ cd ..") && !line.startsWith("$ cd /")) {
             const directory = line.slice(5)
-            navigation.push(directory)
-            let currentValue = fileTree.get(directory)
-            if (!currentValue) {
-                fileTree.set(directory, 0)
-            }
+            const newDirectory = navigation[navigation.length - 1].add(directory)
+            navigation.push(newDirectory)
+
         }
         else if (line.startsWith("$ cd ..")) {
             navigation.pop()
         }
         else if (Number(line[0]) === parseInt(line[0])) {
-
             const fileSize = Number(line.split(" ")[0])
             for (let i = 0; i < navigation.length; i++) {
-                let currentValue = fileTree.get(navigation[i])
-                fileTree.set(navigation[i], currentValue + fileSize)
+                navigation[i].addFileSize(fileSize)
             }
-
         }
     }))
-    fileTree.forEach((value) => value <= 100000 ? total += value : null)
-    console.log(fileTree)
-    return total
+    return fileStructure.sumFileSizes(root)
 }
 
 console.log("Sum of Total Directory Size: ", sumOfTotalSizes(lines))
