@@ -81,7 +81,7 @@ function highestScenicScore(input: string[]): number {
                 }
                 for (let j = index - 1; j >= 0; j--) {
                     top++
-                    if (tree <= Number(input[j][i])) { // looking through top
+                    if (tree <= Number(input[j][i])) { // looking top
                         break
                     }
                 }
