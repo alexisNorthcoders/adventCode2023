@@ -5,37 +5,46 @@ const text: string = await file.text();
 const lines: string[] = text.split("\n")
 
 function countVisibleTrees(input: string[]) {
-    const topEdge: number[] = []
-    const leftEdge: number[] = []
-    const rightEdge: number[] = []
-    const bottomEdge: number[] = []
-    let count = 0
+    let count = (input.length - 2) * 2 // left and right tree line edges
     input.forEach((treeLine: string, index: number) => {
-        if (index === 0) {
-            count += treeLine.length
-            //topEdge.push(...treeLine.slice(1,-1).split("").map(Number))
-
-            for (let i = 1; i < treeLine.length - 1; i++) {
-                topEdge.push(Number(treeLine[i]));
-            }
-        }
-        else if (index === treeLine.length - 1) {
-
-            for (let i = 1; i < treeLine.length - 1; i++) {
-                bottomEdge.push(Number(treeLine[i]));
-            }
-            count += treeLine.length
+        if (index === 0 || index === treeLine.length - 1) { 
+            count += treeLine.length // top and bottom tree line edges
         }
         else {
-            leftEdge.push(Number(treeLine[0]))
-            rightEdge.push(Number(treeLine.slice(-1)))
-            count += 2
+            for (let i = 1; i < treeLine.length - 1; i++) {
+                const tree = Number(treeLine[i])
+                let hiddenTop = false
+                let hiddenBot = false
+                let hiddenLeft = false
+                let hiddenRight = false
+                for (let j = 0; j < i; j++) {
+                    if (Number(treeLine[j]) >= tree) { // looking through left
+                        hiddenLeft = true
+                        break
+                    }
+                }
+                for (let j = treeLine.length - 1; j > i; j--) {
+                    if (Number(treeLine[j]) >= tree) {  // looking through right
+                        hiddenRight = true
+                        break
+                    }
+                }
+                for (let j = input.length - 1; j > index; j--) {
+                    if (Number(input[j][i]) >= tree) { // looking through bottom
+                        hiddenBot = true
+                        break
+                    }
+                }
+                for (let j = 0; j < index; j++) {
+                    if (Number(input[j][i]) >= tree) { // looking through top
+                        hiddenTop = true
+                        break
+                    }
+                }
+                hiddenTop && hiddenBot && hiddenLeft && hiddenRight ? null : count++
+            }
         }
     })
-    console.log(topEdge)
-    console.log(bottomEdge)
-    console.log(leftEdge)
-    console.log(rightEdge)
     return count
 }
 
