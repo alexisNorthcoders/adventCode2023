@@ -50,33 +50,7 @@ class Point {
     uniqueTailPositions() {
         return this.uniquePositions.size
     }
-    getTailMovement(initialX: number, initialY: number, finalX: number, finalY: number) {
-        const Xmovement = finalX - initialX
-        const Ymovement = finalY - initialY
-
-        const movement = []
-
-        if (Xmovement > 0) {
-            movement.push(`R ${Math.abs(Xmovement)}`)
-
-        }
-        else if (Xmovement < 0) {
-            movement.push(`L ${Math.abs(Xmovement)}`)
-
-        }
-        if (Ymovement > 0) {
-            movement.push(`U ${Math.abs(Ymovement)}`)
-
-        }
-        else if (Ymovement < 0) {
-            movement.push(`D ${Math.abs(Ymovement)}`)
-
-        }
-
-        return movement
-
-    }
-
+  
 }
 
 function part1Movement(input: string[]) {
