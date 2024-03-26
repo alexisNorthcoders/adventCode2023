@@ -4,86 +4,112 @@ const file = Bun.file(path);
 const text: string = await file.text();
 const lines: string[] = text.split("\n")
 
-class Head {
-    headX: number
-    headY: number
-    tailX: number
-    tailY: number
-    uniquePositions: Set<string>
-    constructor(headX = 0, headY = 0, tailX = 0, tailY = 0) {
 
-        this.headX = headX
-        this.headY = headY
-        this.tailX = tailX
-        this.tailY = tailY
+class Point {
+    x: number
+    y: number
+
+    uniquePositions: Set<string>
+    constructor(x = 0, y = 0) {
+
+        this.x = x
+        this.y = y
         this.uniquePositions = new Set()
-        this.tailCurrentPosition()
+        this.markCurrentPosition(0, 0)
     }
-    move(direction: string, steps: number) {
+    move(direction: string) {
         switch (direction) {
             case "U":
-                this.headY += steps;
-                for (let i = 0; i < steps; i++) {
-                    if (Math.hypot(this.headX - this.tailX, this.headY - this.tailY) > Math.SQRT2) {
-                        this.tailX = this.headX
-                        this.tailY++
-                        this.tailCurrentPosition()
-                    }
-                }
+                this.y++
                 break;
             case "D":
-                this.headY -= steps;
-                for (let i = 0; i < steps; i++) {
-                    if (Math.hypot(this.headX - this.tailX, this.headY - this.tailY) > Math.SQRT2) {
-                        this.tailX = this.headX
-                        this.tailY -= 1
-                        this.tailCurrentPosition()
-                    }
-                }
+                this.y--
                 break;
             case "L":
-                this.headX -= steps;
-                for (let i = 0; i < steps; i++) {
-                    if (Math.hypot(this.headX - this.tailX, this.headY - this.tailY) > Math.SQRT2) {
-                        this.tailY = this.headY
-                        this.tailX -= 1
-                        this.tailCurrentPosition()
-                    }
-                }
+                this.x--
                 break;
             case "R":
-                this.headX += steps;
-                for (let i = 0; i < steps; i++) {
-                    if (Math.hypot(this.headX - this.tailX, this.headY - this.tailY) > Math.SQRT2) {
-                        this.tailY = this.headY
-                        this.tailX += 1
-                        this.tailCurrentPosition()
-                    }
-                }
+                this.x++
                 break;
         }
-        return { x: this.headX, y: this.headY }
     }
-    tailCurrentPosition() {
-        this.uniquePositions.add(`${this.tailX},${this.tailY}`)
+    follow(point: Point) {
+        const distance = Math.max(Math.abs(this.x - point.x), Math.abs(this.y - point.y))
+        if (distance > 1) {
+            const directionX = point.x - this.x
+            const directionY = point.y - this.y
+
+            this.x += Math.abs(directionX) === 2 ? Math.sign(directionX) : directionX
+            this.y += Math.abs(directionY) === 2 ? Math.sign(directionY) : directionY
+        }
+
+    }
+    markCurrentPosition(x: number, y: number) {
+        this.uniquePositions.add(`${x},${y}`)
     }
     uniqueTailPositions() {
         return this.uniquePositions.size
     }
-    getTailPosition() {
-        return { headX: this.headX, headY: this.headY, tailX: this.tailX, tailY: this.tailY }
+    getTailMovement(initialX: number, initialY: number, finalX: number, finalY: number) {
+        const Xmovement = finalX - initialX
+        const Ymovement = finalY - initialY
+
+        const movement = []
+
+        if (Xmovement > 0) {
+            movement.push(`R ${Math.abs(Xmovement)}`)
+
+        }
+        else if (Xmovement < 0) {
+            movement.push(`L ${Math.abs(Xmovement)}`)
+
+        }
+        if (Ymovement > 0) {
+            movement.push(`U ${Math.abs(Ymovement)}`)
+
+        }
+        else if (Ymovement < 0) {
+            movement.push(`D ${Math.abs(Ymovement)}`)
+
+        }
+
+        return movement
+
     }
 
 }
 
-const head = new Head()
-function headMovement(input: string[]) {
-
+function part1Movement(input: string[]) {
+    const head = new Point()
+    const tail = new Point()
     input.forEach((movement) => {
         const [direction, length] = movement.split(" ")
-        head.move(direction, Number(length))
+        for (let i = 0; i < Number(length); i++) {
+            head.move(direction)
+            tail.follow(head)
+            tail.markCurrentPosition(tail.x, tail.y)
+
+        }
     })
-    return head.uniqueTailPositions()
+    return tail.uniqueTailPositions()
+}
+function part2Movement(input: string[]) {
+    const rope = new Array(10).fill(0).map(() => new Point())
+    input.forEach((movement) => {
+        const [direction, length] = movement.split(" ")
+        for (let i = 0; i < Number(length); i++) {
+            rope[0].move(direction)
+            for (let j = 1; j < rope.length; j++) {
+                const point = rope[j]
+                point.follow(rope[j - 1])
+
+            }
+            rope[9].markCurrentPosition(rope[9].x, rope[9].y)
+        }
+    })
+    return rope[9].uniqueTailPositions()
 }
 
-console.log("number of unique positions: ", headMovement(lines))
+console.log("number of unique positions part1: ", part1Movement(lines))
+console.log("number of unique positions part2: ", part2Movement(lines))
+
