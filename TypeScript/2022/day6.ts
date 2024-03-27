@@ -5,8 +5,10 @@ const text: string = await file.text();
 
 function findFirstMarker(input: string) {
     let marker: number = 0
+    
     for (let i = 0; i < input.length; i++) {
         if (new Set(text.slice(0 + i, 4 + i).split("")).size === 4) {
+            
             marker = i
             break
         }
