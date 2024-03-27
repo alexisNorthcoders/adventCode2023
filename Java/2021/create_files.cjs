@@ -19,6 +19,33 @@ function createFiles(dayNumber) {
 }
 
 const dayNumber = process.argv[2];
-const code = ``
+const code = `import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
+public class day${dayNumber} {
+    public static void main(String[] args) {
+        String filename;
+        if (args.length > 0 && args[0].equals("sample")) {
+            filename = "./inputs/sample_day${dayNumber}.txt"; 
+        } else {
+            filename = "./inputs/day${dayNumber}.txt"; 
+        }
+        try {
+            FileReader fileReader = new FileReader(filename);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                
+                System.out.println(line);
+            }
+            
+            bufferedReader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}`
 
 createFiles(dayNumber,code);
