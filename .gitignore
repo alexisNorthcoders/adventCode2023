@@ -1,3 +1,21 @@
 input*.txt
 day*.txt
 *.class
+
+# Ignore Visual Studio files
+*.suo
+*.user
+*.vs/
+.vscode/
+
+# Ignore build output
+bin/
+obj/
+
+# Ignore NuGet packages
+*.nuget.config
+packages/
+
+# Ignore .NET Core files
+*.dll
+*.pdb
