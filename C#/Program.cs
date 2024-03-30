@@ -7,13 +7,14 @@ namespace AdventOfCode2020
     {
         static void Main(string[] args)
         {
-             if (args.Length < 1)
+             if (args.Length < 1 || args.Length > 2)
             {
-                Console.WriteLine("Usage: dotnet run <day_number> ");
+                Console.WriteLine("Usage: dotnet run <day_number> [sample]");
                 return;
             }
             string dayNumber = args[0];
-            string inputFilePath = $"Day{dayNumber}/input.txt";
+            bool isSample = args.Length == 2 && args[1].Equals("sample", StringComparison.OrdinalIgnoreCase);
+            string inputFilePath = isSample ? $"Day{dayNumber}/sample_input.txt" : $"Day{dayNumber}/input.txt";
 
             string[] lines = File.ReadAllLines(inputFilePath);
 
