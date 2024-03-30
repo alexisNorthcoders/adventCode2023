@@ -7,14 +7,17 @@ namespace AdventOfCode2020
     {
         static void Main(string[] args)
         {
-             if (args.Length < 1 || args.Length > 2)
+            if (args.Length < 1 || args.Length > 2)
             {
                 Console.WriteLine("Usage: dotnet run <day_number> [sample]");
                 return;
             }
             string dayNumber = args[0];
-            bool isSample = args.Length == 2 && args[1].Equals("sample", StringComparison.OrdinalIgnoreCase);
-            string inputFilePath = isSample ? $"Day{dayNumber}/sample_input.txt" : $"Day{dayNumber}/input.txt";
+            bool isSample =
+                args.Length == 2 && args[1].Equals("sample", StringComparison.OrdinalIgnoreCase);
+            string inputFilePath = isSample
+                ? $"Day{dayNumber}/sample_input.txt"
+                : $"Day{dayNumber}/input.txt";
 
             string[] lines = File.ReadAllLines(inputFilePath);
 
@@ -31,14 +34,25 @@ namespace AdventOfCode2020
 
         static object InvokeSolvePuzzleMethod(string className, string[] lines)
         {
-            // Get the Type object for the class
-            Type classType = Type.GetType(className);
+            Type? classType = Type.GetType(className);
+            System.Reflection.MethodInfo? solveMethod = classType?.GetMethod("SolvePuzzle");
 
-            // Get the MethodInfo object for the SolvePuzzle method
-            System.Reflection.MethodInfo solveMethod = classType.GetMethod("SolvePuzzle");
-
-            
-            return solveMethod.Invoke(null, new object[] { lines });
+            if (solveMethod != null)
+            {
+                object? result = solveMethod.Invoke(null, new object[] { lines });
+                if (result != null)
+                {
+                    return result;
+                }
+                else
+                {
+                    throw new InvalidOperationException("SolvePuzzle returned null.");
+                }
+            }
+            else
+            {
+                throw new InvalidOperationException("SolvePuzzle method not found.");
+            }
         }
     }
 }
