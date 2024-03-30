@@ -7,17 +7,37 @@ namespace AdventOfCode2020
     {
         static void Main(string[] args)
         {
-            
-            string inputFilePath = "Day1/input.txt";
+             if (args.Length < 1)
+            {
+                Console.WriteLine("Usage: dotnet run <day_number> ");
+                return;
+            }
+            string dayNumber = args[0];
+            string inputFilePath = $"Day{dayNumber}/input.txt";
+
             string[] lines = File.ReadAllLines(inputFilePath);
 
-           
-            int result1 = AdventOfCode2020.Day1.Part1.SolvePuzzle(lines);
-             int result2 = AdventOfCode2020.Day1.Part2.SolvePuzzle(lines);
+            string classNamePart1 = $"AdventOfCode2020.Day{dayNumber}.Part1";
+            string classNamePart2 = $"AdventOfCode2020.Day{dayNumber}.Part2";
 
-           
-            Console.WriteLine("Find the two entries that sum to 2020; what do you get if you multiply them together?: " + result1);
-            Console.WriteLine("what is the product of the three entries that sum to 2020?: " + result2);
+            int result1 = (int)InvokeSolvePuzzleMethod(classNamePart1, lines);
+
+            int result2 = (int)InvokeSolvePuzzleMethod(classNamePart2, lines);
+
+            Console.WriteLine("Part 1: " + result1);
+            Console.WriteLine("Part 2: " + result2);
+        }
+
+        static object InvokeSolvePuzzleMethod(string className, string[] lines)
+        {
+            // Get the Type object for the class
+            Type classType = Type.GetType(className);
+
+            // Get the MethodInfo object for the SolvePuzzle method
+            System.Reflection.MethodInfo solveMethod = classType.GetMethod("SolvePuzzle");
+
+            
+            return solveMethod.Invoke(null, new object[] { lines });
         }
     }
 }
