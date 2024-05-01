@@ -22,38 +22,25 @@ public class day3 {
     }
 
     public static int part1(String filename) {
-        int[] sums = null;
-        int lineCounter = 0;
+
         String gamma = "";
         String epsilon = "";
 
+        List<String> numberList = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
             String line;
             while ((line = br.readLine()) != null) {
-                lineCounter++;
-                if (lineCounter == 1) {
-                    sums = new int[line.length()];
-                }
-                for (int i = 0; i < line.length(); i++) {
-
-                    if (line.charAt(i) == '0') {
-                        sums[i]++;
-                    }
-                }
+                numberList.add(line);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+        int lineLength = numberList.get(0).length();
 
-        for (int i = 0; i < sums.length; i++) {
-
-            if (sums[i] < lineCounter / 2) {
-                gamma += 0;
-                epsilon += 1;
-            } else {
-                gamma += 1;
-                epsilon += 0;
-            }
+        for (int i = 0; i < lineLength; i++) {
+            char mostCommon = getMostCommon(numberList, i);
+            gamma += mostCommon;
+            epsilon += mostCommon == '0' ? '1' : '0';
         }
 
         int gammaDecimal = Integer.parseInt(gamma, 2);
@@ -64,17 +51,18 @@ public class day3 {
     public static int part2(String filename) {
 
         List<String> remainingNumbers = new ArrayList<>();
-        int lineLength = 0;
+
         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
             String line;
 
             while ((line = br.readLine()) != null) {
-                lineLength = line.length();
+
                 remainingNumbers.add(line);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+        int lineLength = remainingNumbers.get(0).length();
 
         // find oxygen rating
         char mostCommon;
