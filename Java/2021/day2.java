@@ -10,12 +10,15 @@ public class day2 {
         } else {
             filename = "./inputs/day2.txt";
         }
-        int result = calculateProduct(filename);
+        int result1 = part1(filename);
         System.out.println(
-                "What do you get if you multiply your final horizontal position by your final depth? " + result);
+                "What do you get if you multiply your final horizontal position by your final depth? " + result1);
+        int result2 = part2(filename);
+        System.out.println(
+                "What do you get if you multiply your final horizontal position by your final depth? " + result2);
     }
 
-    public static int calculateProduct(String filename) {
+    public static int part1(String filename) {
         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
             int depth = 0;
             int horizontal = 0;
@@ -42,4 +45,37 @@ public class day2 {
             return 0;
         }
     }
+
+    public static int part2(String filename) {
+        try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
+            int depth = 0;
+            int horizontal = 0;
+            int aim = 0;
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] instructions = line.split(" ");
+                String move = instructions[0];
+                int x = Integer.parseInt(instructions[1]);
+                switch (move) {
+                    case "forward":
+                        horizontal += x;
+                        depth += aim * x;
+                        break;
+                    case "up":
+                        aim -= x;
+                        break;
+                    case "down":
+                        aim += x;
+                        break;
+                }
+
+            }
+            return depth * horizontal;
+
+        } catch (IOException e) {
+            System.err.println("Error reading file: " + e.getMessage());
+            return 0;
+        }
+    }
+
 }
