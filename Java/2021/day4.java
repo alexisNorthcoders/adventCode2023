@@ -83,13 +83,11 @@ public class day4 {
     static class BingoCard {
         private List<String[]> rows;
         private boolean isCardCompleted;
-        private boolean lastCard;
-
+        
         public BingoCard() {
             rows = new ArrayList<>();
             isCardCompleted = false;
-            lastCard = false;
-        }
+   }
 
         public void addRow(String[] row) {
             rows.add(row);
@@ -150,15 +148,7 @@ public class day4 {
             return false;
         }
 
-        public boolean isLastCard() {
-            return lastCard;
-        }
-
-        public void setLastCard(boolean lastCard) {
-            this.lastCard = lastCard;
-        }
-
-        private boolean checkCompletedColumns() {
+      private boolean checkCompletedColumns() {
             for (int col = 0; col < 5; col++) {
                 boolean completed = true;
                 for (int row = 0; row < 5; row++) {
