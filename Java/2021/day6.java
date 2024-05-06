@@ -47,16 +47,9 @@ public class day6 {
 
         while (i <= n) {
             long tempZeroPop = lanternfishList.get(0).population;
-
-            lanternfishList.get(0).population = lanternfishList.get(1).population;
-            lanternfishList.get(1).population = lanternfishList.get(2).population;
-            lanternfishList.get(2).population = lanternfishList.get(3).population;
-            lanternfishList.get(3).population = lanternfishList.get(4).population;
-            lanternfishList.get(4).population = lanternfishList.get(5).population;
-            lanternfishList.get(5).population = lanternfishList.get(6).population;
-            lanternfishList.get(6).population = lanternfishList.get(7).population;
-            lanternfishList.get(7).population = lanternfishList.get(8).population;
-
+            for (int k = 0; k <= 7; k++) {
+                lanternfishList.get(k).population = lanternfishList.get(k + 1).population;
+            }
             lanternfishList.get(6).population += tempZeroPop;
             lanternfishList.get(8).population = tempZeroPop;
 
