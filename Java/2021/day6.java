@@ -18,48 +18,66 @@ public class day6 {
 
             bufferedReader.close();
             ArrayList<Lanternfish> lanternfishList = new ArrayList<>();
-            for (String value : initialState) {
-                Lanternfish lanternfish = new Lanternfish(Integer.parseInt(value));
+            for (int i = 0; i <= 9; i++) {
+                Lanternfish lanternfish = new Lanternfish(i);
                 lanternfishList.add(lanternfish);
             }
+            for (String value : initialState) {
+                int index = Integer.parseInt(value);
+                lanternfishList.get(index).population++;
+            }
+            if (args.length > 0 && args[0].equals("part1")) {
+                long result1 = part1(lanternfishList, 80);
+                System.out.println("How many lanternfish would there be after 80 days? " + result1);
+            } else if (args.length > 0 && args[0].equals("part2")) {
+                long result2 = part1(lanternfishList, 256);
+                System.out.println("How many lanternfish would there be after 256 days? " + result2);
+            }
 
-            int result1 = part1(lanternfishList);
-            System.out.println("How many lanternfish would there be after 80 days? " + result1);
-        } catch (IOException e) {
+        } catch (
+
+        IOException e) {
             e.printStackTrace();
         }
 
     }
 
-    public static int part1(ArrayList<Lanternfish> lanternfishList) {
-        int n = 80;
+    public static long part1(ArrayList<Lanternfish> lanternfishList, int n) {
         int i = 0;
 
-        while (i < n) {
-            for (int j = 0; j < lanternfishList.size(); j++) {
-                if (lanternfishList.get(j).timer == 0) {
-                    lanternfishList.add(new Lanternfish(9));
-                }
-                lanternfishList.get(j).update();
-            }
+        while (i <= n) {
+            long tempZeroPop = lanternfishList.get(0).population;
+
+            lanternfishList.get(0).population = lanternfishList.get(1).population;
+            lanternfishList.get(1).population = lanternfishList.get(2).population;
+            lanternfishList.get(2).population = lanternfishList.get(3).population;
+            lanternfishList.get(3).population = lanternfishList.get(4).population;
+            lanternfishList.get(4).population = lanternfishList.get(5).population;
+            lanternfishList.get(5).population = lanternfishList.get(6).population;
+            lanternfishList.get(6).population = lanternfishList.get(7).population;
+            lanternfishList.get(7).population = lanternfishList.get(8).population;
+
+            lanternfishList.get(6).population += tempZeroPop;
+            lanternfishList.get(8).population = tempZeroPop;
+
             i++;
         }
-        return lanternfishList.size();
+        long totalPopulation = 0;
+        for (int j = 0; j < 8; j++) {
+            totalPopulation += lanternfishList.get(j).population;
+
+        }
+        return totalPopulation;
     }
 
     static class Lanternfish {
         int timer;
+        long population;
 
         public Lanternfish(int x) {
             timer = x;
+            population = 0;
         }
 
-        public void update() {
-            if (timer == 0) {
-                timer = 6;
-            } else {
-                timer--;
-            }
-        }
     }
 }
