@@ -105,5 +105,6 @@ public class day7 {
             fuel += i;
         }
         return fuel;
+      //   return distance*(distance+1)/2; using Gauss law
     }
 }
