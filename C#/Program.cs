@@ -26,7 +26,7 @@ namespace AdventOfCode2020
 
             int result1 = (int)InvokeSolvePuzzleMethod(classNamePart1, lines);
 
-            long result2 = (long)InvokeSolvePuzzleMethod(classNamePart2, lines);
+            int result2 = (int)InvokeSolvePuzzleMethod(classNamePart2, lines);
 
             Console.WriteLine("Part 1: " + result1);
             Console.WriteLine("Part 2: " + result2);
