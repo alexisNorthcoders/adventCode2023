@@ -28,7 +28,33 @@ namespace AdventOfCode2020.Day6
     {
         public static int SolvePuzzle(string[] input)
         {
-            return 0;
+            HashSet<char> yesVotes = [];
+            int counter = 0;
+            bool firstPerson = true;
+            foreach (string line in input)
+            {
+                if (string.IsNullOrWhiteSpace(line))
+                {
+                    counter += yesVotes.Count;
+                    yesVotes.Clear();
+                    firstPerson = true;
+                    continue;
+                }
+
+                HashSet<char> singlePersonVotes = new(line);
+
+                if (firstPerson)
+                {
+                    yesVotes.UnionWith(singlePersonVotes);
+                    firstPerson = false;
+                }
+                else
+                {
+                    yesVotes.IntersectWith(singlePersonVotes);
+                }
+            }
+            counter += yesVotes.Count;
+            return counter;
         }
     }
 
