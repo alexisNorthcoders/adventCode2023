@@ -99,11 +99,12 @@ namespace AdventOfCode2020.Day5
             }
             seatID.Sort();
             double mySeat;
-            int j =0;
-            while (seatID[j]+1==seatID[j+1]){
+            int j = 0;
+            while (seatID[j] + 1 == seatID[j + 1])
+            {
                 j++;
             }
-            mySeat=seatID[j]+1;
+            mySeat = seatID[j] + 1;
             return Convert.ToInt32(mySeat);
         }
     }
