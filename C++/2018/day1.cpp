@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <vector>
+#include <unordered_set>
 using namespace std;
 
 int firstPart(const string &filePath)
@@ -29,9 +29,9 @@ int secondPart(const string &filePath)
     int result = 0;
     int frequency = 0;
 
-    vector<int> numbers;
+    unordered_set<int> numbers;
     bool duplicateFound = false;
-    numbers.push_back(frequency);
+    numbers.insert(frequency);
     while (!duplicateFound)
     {
         string line;
@@ -45,21 +45,18 @@ int secondPart(const string &filePath)
         {
             frequency += stoi(line);
 
-            for (int i = 0; i < numbers.size(); i++)
+            if (numbers.find(frequency) != numbers.end())
             {
-                if (frequency == numbers[i])
-                {
-                    duplicateFound = true;
-                    return frequency;
-                }
+                duplicateFound = true;
+                break;
             }
-            numbers.push_back(frequency);
+            numbers.insert(frequency);
         }
 
         inputFile.close();
     }
 
-    return 0;
+    return frequency;
 }
 
 int main()
