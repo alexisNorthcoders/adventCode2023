@@ -28,10 +28,11 @@ int secondPart(const string &filePath)
 
     int result = 0;
     int frequency = 0;
-
     unordered_set<int> numbers;
     bool duplicateFound = false;
+
     numbers.insert(frequency);
+
     while (!duplicateFound)
     {
         string line;
@@ -61,8 +62,27 @@ int secondPart(const string &filePath)
 
 int main()
 {
-    string filePath = "./inputs/day1.txt";
+    int choice;
+    string filePath = "./inputs/";
 
+    cout << "Select the input file:" << endl;
+    cout << "1. Sample" << endl;
+    cout << "2. Full Input" << endl;
+    cout << "Enter your choice (1 or 2): ";
+    cin >> choice;
+
+    switch (choice)
+    {
+    case 1:
+        filePath += "sample_day1.txt";
+        break;
+    case 2:
+        filePath += "day1.txt";
+        break;
+    default:
+        cerr << "Invalid choice. Exiting program." << endl;
+        return 1;
+    }
     int resultPart1 = firstPart(filePath);
     if (resultPart1 != -1)
     {
