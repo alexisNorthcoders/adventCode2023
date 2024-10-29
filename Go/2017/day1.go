@@ -8,6 +8,7 @@ import (
 
 func main(){
 	fmt.Println("Day 1\n Part 1:",part1())
+	fmt.Println(" Part 2:",part2())
 }
 func readFile(filePath string)([]int){
 	var fileContent []int
@@ -45,6 +46,21 @@ func part1()(int){
 			continue
 		}
 		if v == fileContent[i-1]{
+			sum += v
+		}
+	}
+	return sum
+}
+func part2()(int){
+	filePath := "./input/day1.txt"
+	
+	var fileContent = readFile(filePath)
+	var sum int
+	var steps int = len(fileContent)/2
+	
+	for i,v := range fileContent{
+		var circularSteps = (i+steps) % len(fileContent)
+		if v == fileContent[circularSteps]{
 			sum += v
 		}
 	}
