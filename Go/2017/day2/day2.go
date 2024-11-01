@@ -69,10 +69,26 @@ func part1() int {
 }
 
 func part2() int {
-	filePath := "./input/sample_day2.txt"
+	filePath := "./input/day2.txt"
+
+	var checksum int
 
 	var fileContent = readFile(filePath)
-	fmt.Println(fileContent)
 
-	return 0
+	for _, line := range fileContent {
+
+		for i := 0; i < len(line); i++ {
+			for j := i + 1; j < len(line); j++ {
+				if line[i] != 0 && line[j]%line[i] == 0 {
+					checksum += line[j] / line[i]
+					break
+				}
+				if line[j] != 0 && line[i]%line[j] == 0 {
+					checksum += line[i] / line[j]
+					break
+				}
+			}
+		}
+	}
+	return checksum
 }
