@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"sort"
 	"strconv"
 	"strings"
 )
@@ -76,15 +77,11 @@ func part2() int {
 	var fileContent = readFile(filePath)
 
 	for _, line := range fileContent {
-
+		sort.Ints(line)
 		for i := 0; i < len(line); i++ {
 			for j := i + 1; j < len(line); j++ {
-				if line[i] != 0 && line[j]%line[i] == 0 {
+				if line[j]%line[i] == 0 {
 					checksum += line[j] / line[i]
-					break
-				}
-				if line[j] != 0 && line[i]%line[j] == 0 {
-					checksum += line[i] / line[j]
 					break
 				}
 			}
