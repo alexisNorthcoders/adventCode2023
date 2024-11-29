@@ -2,7 +2,6 @@ const { readFile } = require("fs/promises");
 
 const path = process.argv.includes("sample") ? "./inputs/sample_day1.txt" : "./inputs/day1.txt";
 
-
 async function day1() {
 
     const file = await readFile(path, 'utf8')
