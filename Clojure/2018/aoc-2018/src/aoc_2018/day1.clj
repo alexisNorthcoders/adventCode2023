@@ -1,23 +1,17 @@
 (ns aoc-2018.day1
   (:require
    [aoc-2018.day1 :as day1]
-   [clojure.string :as str]))
-
-(defn read-input []
-  (slurp "resources/day1.txt"))
-
-(defn parse-input []
-  (map #(Integer/parseInt %) (str/split (read-input) #"\n")))
+   [aoc-2018.core :as core]))
 
 (defn part1 []
-  (let [numbers (parse-input)
+  (let [numbers (core/parse-input "day1")
         total-sum (reduce + numbers)]
     total-sum))
 
 (defn part2 []
   (loop [seen #{}
          current-sum 0
-         remaining (cycle (parse-input))]
+         remaining (cycle (core/parse-input "day1"))]
     (let [next-number (first remaining)
           new-sum (+ current-sum next-number)]
       (if (seen new-sum)

@@ -19,3 +19,7 @@ packages/
 # Ignore .NET Core files
 *.dll
 *.pdb
+
+# Ignore Clojure files
+.clj-kondo
+.lsp
