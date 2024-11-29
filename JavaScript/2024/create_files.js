@@ -29,9 +29,11 @@ async function day${dayNumber}() {
     const file = await readFile(path, 'utf8')
     const lines = file.split('\\n')
 
+    console.time('Total Time');
     console.log('🌟 --- Day ${dayNumber} Results --- 🌟');
-    console.log('📌 Part 1: ', part1());
-    console.log('📌 Part 2: ', part2());
+    console.log('📌 Part 1: ', part1(lines));
+    console.log('📌 Part 2: ', part2(lines));
+    console.timeEnd('Total Time');
 }
 
 function part1() {
