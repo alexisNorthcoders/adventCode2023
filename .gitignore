@@ -1,6 +1,7 @@
 input*.txt
 day*.txt
 *.class
+.env
 
 # Ignore Visual Studio files
 *.suo
