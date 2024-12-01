@@ -9,6 +9,18 @@
         differences (map #(Math/abs (- %1 %2)) leftList rightList)]
     (reduce + differences)))
 
+(defn part-1-alt [input]
+  (let [leftList (atom [])
+        rightList (atom [])]
+    (doseq [line input]
+      (let [[left right] (map #(Integer/parseInt %) (clojure.string/split line #"\s+"))]
+        (swap! leftList conj left)
+        (swap! rightList conj right)))
+    (let [sorted-left (sort @leftList)
+          sorted-right (sort @rightList)]
+      (reduce + (map  #(Math/abs (- %1 %2)) sorted-left sorted-right)))))
+
+
 (defn part-2 [input]
   (let [leftListMap (atom {})
         rightListMap (atom {})
@@ -30,5 +42,6 @@
 
 (defn -main [input]
   (utils/exec-time "Part 1:" part-1 input)
+  (utils/exec-time "Part 1:" part-1-alt input)
   (utils/exec-time "Part 2:" part-2 input)
   (utils/exec-time "Part 2-alt:" part-2-alt input))
