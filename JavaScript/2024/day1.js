@@ -15,11 +15,32 @@ async function day1() {
 
 function part1(input) {
     let result = 0
+    const [leftList, rightList] = [[], []]
+    input.forEach(line => {
+        const [left, right] = line.split(/\s+/)
+        leftList.push(Number(left))
+        rightList.push(Number(right))
+    })
+    leftList.sort((a, b) => a - b)
+    rightList.sort((a, b) => a - b)
+
+    leftList.forEach((value, i) => result += Math.abs(value - rightList[i]))
     return result
 }
 
 function part2(input) {
     let result = 0
+    const leftListMap = {}
+    const rightListMap = {}
+    input.forEach(line => {
+        const [left, right] = line.split(/\s+/)
+        leftListMap[left] ? leftListMap[left]++ : leftListMap[left] = 1
+        rightListMap[right] ? rightListMap[right]++ : rightListMap[right] = 1
+    })
+
+    for (value in leftListMap) {
+        result += leftListMap[value] * value * (rightListMap[value] ?? 0)
+    }
     return result
 }
 

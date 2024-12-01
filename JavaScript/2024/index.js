@@ -38,8 +38,10 @@ const fs = require('fs');
             req.end();
         });
 
+        const trimmedResponse = response.trim();
+
         const filePath = `./inputs/day${DAY}.txt`;
-        fs.writeFileSync(filePath, response);
+        fs.writeFileSync(filePath, trimmedResponse);
 
         console.log(`Input saved to ${filePath}`);
     } catch (error) {
