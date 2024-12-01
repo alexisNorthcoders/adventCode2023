@@ -21,13 +21,14 @@
       (swap! result + (* (get @leftListMap value) value (get @rightListMap value 0))))
     @result))
 
-(defn part-2-alts [input]
+(defn part-2-alt [input]
   (let [lines input
         leftList  (map #(Integer/parseInt (first (clojure.string/split % #"\s+"))) lines)
         rightList (map #(Integer/parseInt (last (clojure.string/split % #"\s+"))) lines)
-        frequencies  (map #(* % ((frequencies rightList) % 0)) leftList)]
-    (reduce + frequencies)))
+        frequencies  (frequencies rightList)]
+    (reduce + (map #(* % (get frequencies % 0)) leftList))))
 
 (defn -main [input]
   (utils/exec-time "Part 1:" part-1 input)
-  (utils/exec-time "Part 2:" part-2-alts input))
+  (utils/exec-time "Part 2:" part-2 input)
+  (utils/exec-time "Part 2-alt:" part-2-alt input))
