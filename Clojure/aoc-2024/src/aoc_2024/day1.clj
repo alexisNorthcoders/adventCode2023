@@ -3,12 +3,10 @@
 
 (defn part-1 [input]
   (let [lines input
-        leftList (map #(Integer/parseInt (first (clojure.string/split % #"\s+"))) lines)
-        rightList (map #(Integer/parseInt (last (clojure.string/split % #"\s+"))) lines)
-        sorted-left (sort leftList)
-        sorted-right (sort rightList)
-        differences (map #(Math/abs (- %1 %2)) sorted-left sorted-right)]
-    (reduce + differences))) 
+        leftList (sort (map #(Integer/parseInt (first (clojure.string/split % #"\s+"))) lines))
+        rightList (sort (map #(Integer/parseInt (last (clojure.string/split % #"\s+"))) lines))
+        differences (map #(Math/abs (- %1 %2)) leftList rightList)]
+    (reduce + differences)))
 
 (defn part-2 [input]
   (let [leftListMap (atom {})
@@ -26,5 +24,5 @@
 (defn -main [input]
   (let [result (part-1 input)]
     (println "Part 1:" result))
-   (let [result (part-2 input)]
+  (let [result (part-2 input)]
     (println "Part 2:" result)))
