@@ -1,5 +1,6 @@
 (ns aoc-2024.day1
-  (:require [clojure.string :as str]))
+  (:require [clojure.string :as str]
+            [aoc-2024.utils :as utils]))
 
 (defn part-1 [input]
   (let [lines input
@@ -22,13 +23,11 @@
 
 (defn part-2-alts [input]
   (let [lines input
-       leftList  (map #(Integer/parseInt (first (clojure.string/split % #"\s+"))) lines)
-       rightList (map #(Integer/parseInt (last (clojure.string/split % #"\s+"))) lines)
-       frequencies  (map #(* % ((frequencies rightList) % 0)) leftList)]
-   (reduce + frequencies)))
+        leftList  (map #(Integer/parseInt (first (clojure.string/split % #"\s+"))) lines)
+        rightList (map #(Integer/parseInt (last (clojure.string/split % #"\s+"))) lines)
+        frequencies  (map #(* % ((frequencies rightList) % 0)) leftList)]
+    (reduce + frequencies)))
 
 (defn -main [input]
-  (let [result (part-1 input)]
-    (println "Part 1:" result))
-  (let [result (part-2-alts input)]
-    (println "Part 2:" result)))
+  (utils/exec-time "Part 1:" part-1 input)
+  (utils/exec-time "Part 2:" part-2-alts input))
