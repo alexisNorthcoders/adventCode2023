@@ -16,6 +16,9 @@ async function day3() {
     console.time('T2');
     console.log('📌 Part 2: ', part2(lines));
     console.timeEnd('T2');
+    console.time('T2-alt');
+    console.log('📌 Part 2: ', part2_alt(lines));
+    console.timeEnd('T2-alt');
     console.timeEnd('Total Time');
 }
 /**
@@ -68,6 +71,36 @@ function part2(lines) {
                 result += index[i].product
             }
         }
+    })
+    return result
+}
+
+/**
+ * @param {string[]} lines 
+ */
+function part2_alt(lines) {
+    let result = 0
+    let enabled = true
+    const matchedLines = lines.map(line => [...line.matchAll(/mul\((\d+),(\d+)\)|do\(\)|don\'t/g)].map((mul) => {
+        if (mul[0].includes('mul')) {
+            return mul[1] * mul[2]
+        }
+        if (mul[0] === "don't") {
+            return false
+        }
+        else {
+            return true
+        }
+    }))
+
+    matchedLines.forEach((match) => {
+        match.forEach((mul) => {
+            if (typeof mul === 'number' && enabled) {
+                result += mul
+            }
+            if (!mul) enabled = false
+            if (mul === true) enabled = true
+        })
     })
     return result
 }
