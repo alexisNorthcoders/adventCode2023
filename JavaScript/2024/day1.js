@@ -8,12 +8,12 @@ async function day1() {
     const lines = file.split('\n')
     console.log('🌟 --- Day 1 Results --- 🌟');
     console.time('Total Time');
-    console.time('1');
+    console.time('T1');
     console.log('📌 Part 1: ', part1(lines));
-    console.timeEnd('1');
-    console.time('2');
+    console.timeEnd('T1');
+    console.time('T2');
     console.log('📌 Part 2: ', part2(lines));
-    console.timeEnd('2');
+    console.timeEnd('T2');
     console.timeEnd('Total Time');
 }
 
