@@ -43,12 +43,16 @@ function part2(lines) {
     let result = 0
     const matrix = lines.map(line => line.split(''))
 
+    // search for 'A' and check if both diagonals match SAM or MAS
     for (let y = 1; y < matrix.length - 1; y++) {
         for (let x = 1; x < matrix.length - 1; x++) {
             if (matrix[x][y] === 'A') {
-                const diagonal1 = matrix[x - 1][y - 1] + matrix[x][y] + matrix[x + 1][y + 1]
-                const diagonal2 = matrix[x + 1][y - 1] + matrix[x][y] + matrix[x - 1][y + 1]
-                if (diagonal1 === 'SAM' | diagonal1 === 'MAS' && diagonal2 === 'SAM' | diagonal2 === 'MAS') {
+
+                const diagonal1 = matrix[x - 1][y - 1] + 'A' + matrix[x + 1][y + 1]
+                
+                const diagonal2 = matrix[x + 1][y - 1] + 'A' + matrix[x - 1][y + 1]
+
+                if (diagonal1 === 'SAM' | 'MAS' && diagonal2 === 'SAM' | 'MAS') {
                     result++
                 }
             }
