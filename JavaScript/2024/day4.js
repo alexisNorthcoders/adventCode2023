@@ -37,6 +37,7 @@ function part1(lines) {
 
     // rotate 90 degrees and count
     const rotated90degrees = rotateMatrix90(matrix)
+
     rotated90degrees.forEach(row => result += countXMAS(row))
 
     return result
@@ -119,4 +120,19 @@ function countXMAS(array) {
     joined.matchAll(/SAMX/g).forEach(() => count++)
 
     return count
+}
+
+function rotateMatrix90v2(matrix) {
+    const N = matrix.length;
+
+    for (let x = 0; x < Math.floor(N / 2); x++) {
+        for (let y = x; y < N - x - 1; y++) {
+
+            const temp = matrix[x][y];
+            matrix[x][y] = matrix[N - 1 - y][x];
+            matrix[N - 1 - y][x] = matrix[N - 1 - x][N - 1 - y];
+            matrix[N - 1 - x][N - 1 - y] = matrix[y][N - 1 - x];
+            matrix[y][N - 1 - x] = temp;
+        }
+    }
 }
