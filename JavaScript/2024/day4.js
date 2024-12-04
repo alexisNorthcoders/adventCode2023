@@ -28,17 +28,13 @@ function part1(lines) {
     matrix.forEach(row => result += countXMAS(row))
 
     // rotate 45 degrees and count
-    const rotated = rotateMatrix45(matrix)
-    rotated.forEach(row => result += countXMAS(row))
+    rotateMatrix45(matrix).forEach(row => result += countXMAS(row))
 
     // rotate -45 degrees and count
-    const rotateddirection = rotateMatrixMinus45(matrix)
-    rotateddirection.forEach(row => result += countXMAS(row))
+    rotateMatrixMinus45(matrix).forEach(row => result += countXMAS(row))
 
     // rotate 90 degrees and count
-    const rotated90degrees = rotateMatrix90(matrix)
-
-    rotated90degrees.forEach(row => result += countXMAS(row))
+    rotateMatrix90(matrix).forEach(row => result += countXMAS(row))
 
     return result
 }
