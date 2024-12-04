@@ -6,8 +6,8 @@
     "input": "node --env-file=.env index.js",
     "create": "npm run input && node create_files.js",
     "solve": "bash runAll.bash",
-    "dev": "node --watch day3.js",
-    "day": "node day3.js"
+    "dev": "node --watch day4.js",
+    "day": "node day4.js"
   },
   "author": "Alexis",
   "license": "ISC",
