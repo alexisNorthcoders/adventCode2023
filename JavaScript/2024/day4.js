@@ -22,22 +22,22 @@ async function day4() {
 function part1(lines) {
     let result = 0
     // convert input into matrix
-    const matrix = lines.map(line => line.split(''))
+    const matrix = lines.map(row => row.split(''))
 
     // count XMAS and SAMX on each row 
-    matrix.forEach(line => result += countXMAS(line))
+    matrix.forEach(row => result += countXMAS(row))
 
     // rotate 45 degrees and count
     const rotated = rotateMatrix45(matrix)
-    rotated.forEach(line => result += countXMAS(line))
+    rotated.forEach(row => result += countXMAS(row))
 
     // rotate -45 degrees and count
     const rotateddirection = rotateMatrixMinus45(matrix)
-    rotateddirection.forEach(line => result += countXMAS(line))
+    rotateddirection.forEach(row => result += countXMAS(row))
 
-    // rotate original matrix 90 degrees and count
-    rotateMatrix90(matrix)
-    matrix.forEach(line => result += countXMAS(line))
+    // rotate 90 degrees and count
+    const rotated90degrees = rotateMatrix90(matrix)
+    rotated90degrees.forEach(row => result += countXMAS(row))
 
     return result
 }
@@ -63,23 +63,17 @@ function part2(lines) {
 day4()
 
 function rotateMatrix90(matrix) {
-    const N = matrix.length
+    const rows = matrix.length;
+    const cols = matrix[0].length;
 
-    for (let x = 0; x < N / 2; x++) {
+    const rotated = Array.from({ length: cols }, () => Array(rows));
 
-        for (let y = x; y < N - x - 1; y++) {
-            let temp = matrix[x][y];
-
-            matrix[x][y] = matrix[y][N - 1 - x];
-
-
-            matrix[y][N - 1 - x] = matrix[N - 1 - x][N - 1 - y];
-
-            matrix[N - 1 - x][N - 1 - y] = matrix[N - 1 - y][x];
-
-            matrix[N - 1 - y][x] = temp;
+    for (let i = 0; i < rows; i++) {
+        for (let j = 0; j < cols; j++) {
+            rotated[cols - 1 - j][i] = matrix[i][j];
         }
     }
+    return rotated;
 }
 
 function rotateMatrix45(matrix) {
