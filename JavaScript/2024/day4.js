@@ -29,7 +29,7 @@ function part1(lines) {
 
     // rotate 45 degrees and count
     const rotated = rotateMatrix45(matrix)
-    rotated.forEach(line => result += countXMAS(line))  
+    rotated.forEach(line => result += countXMAS(line))
 
     // rotate -45 degrees and count
     const rotateddirection = rotateMatrixMinus45(matrix)
@@ -42,8 +42,22 @@ function part1(lines) {
     return result
 }
 
-function part2() {
+function part2(lines) {
+    let result = 0
+    const matrix = lines.map(line => line.split(''))
 
+    for (let y = 1; y < matrix.length - 1; y++) {
+        for (let x = 1; x < matrix.length - 1; x++) {
+            if (matrix[x][y] === 'A') {
+                const diagonal1 = matrix[x - 1][y - 1] + matrix[x][y] + matrix[x + 1][y + 1]
+                const diagonal2 = matrix[x + 1][y - 1] + matrix[x][y] + matrix[x - 1][y + 1]
+                if (diagonal1 === 'SAM' | diagonal1 === 'MAS' && diagonal2 === 'SAM' | diagonal2 === 'MAS') {
+                    result++
+                }
+            }
+        }
+    }
+    return result
 }
 
 day4()
@@ -69,7 +83,7 @@ function rotateMatrix90(matrix) {
 }
 
 function rotateMatrix45(matrix) {
-    
+
     const rows = matrix.length;
     const cols = matrix[0].length;
 
