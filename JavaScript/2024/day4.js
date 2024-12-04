@@ -47,12 +47,9 @@ function part2(lines) {
     for (let y = 1; y < matrix.length - 1; y++) {
         for (let x = 1; x < matrix.length - 1; x++) {
             if (matrix[x][y] === 'A') {
-
                 const diagonal1 = matrix[x - 1][y - 1] + 'A' + matrix[x + 1][y + 1]
-                
                 const diagonal2 = matrix[x + 1][y - 1] + 'A' + matrix[x - 1][y + 1]
-
-                if (diagonal1 === 'SAM' | 'MAS' && diagonal2 === 'SAM' | 'MAS') {
+                if (diagonal1 === 'SAM' | diagonal1 === 'MAS' && diagonal2 === 'SAM' | diagonal2 === 'MAS') {
                     result++
                 }
             }
