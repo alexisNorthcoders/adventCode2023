@@ -21,16 +21,21 @@ async function day4() {
 
 function part1(lines) {
     let result = 0
+    // convert input into matrix
     const matrix = lines.map(line => line.split(''))
 
+    // count XMAS and SAMX on each row 
     matrix.forEach(line => result += countXMAS(line))
 
-    let rotated = rotateMatrix45(matrix)
+    // rotate 45 degrees and count
+    const rotated = rotateMatrix45(matrix)
     rotated.forEach(line => result += countXMAS(line))  
 
-    let rotateddirection = rotateMatrixMinus45(matrix)
+    // rotate -45 degrees and count
+    const rotateddirection = rotateMatrixMinus45(matrix)
     rotateddirection.forEach(line => result += countXMAS(line))
 
+    // rotate original matrix 90 degrees and count
     rotateMatrix90(matrix)
     matrix.forEach(line => result += countXMAS(line))
 
