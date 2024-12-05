@@ -19,7 +19,47 @@ async function day5() {
     console.timeEnd('Total Time');
 }
 
-function part1() {
+function part1(lines) {
+
+    const pageOrders = {}
+    const pageUpdates = []
+    let i = 0
+
+    while (!lines[i].match(/^$/)) {
+        const [left, right] = lines[i].split('|')
+        pageOrders[left] = pageOrders[left] ? [...pageOrders[left], (Number(right))] : [Number(right)]
+        i++
+    }
+    while (i < lines.length) {
+        if (lines[i].match(/^$/)) {
+            i++
+            continue
+        }
+        pageUpdates.push(lines[i].split(',').map(Number))
+        i++
+    }
+
+    const validUpdates = []
+    pageUpdates.forEach(update => {
+
+        let validUpdate = true
+        for (let i = 0; i < update.length; i++) {
+            for (let j = i + 1; j < update.length; j++) {
+
+                if (!pageOrders[update[i]]) {
+                    validUpdate = false
+                    break
+
+                }
+                if (pageOrders[update[i]] && !pageOrders[update[i]].includes(update[j])) {
+                    validUpdate = false
+                    break
+                }
+            }
+        }
+        if (validUpdate) validUpdates.push(update[Math.floor(update.length / 2)])
+    })
+    return validUpdates.reduce((a, b) => a + b)
 
 }
 
