@@ -110,26 +110,39 @@ function buildEquationAndValidate(numbers, testValue, part) {
     return false;
 }
 
-function generateCombinations(spaces, part) {
-    let operators
-    if (part) {
-        operators = ['+', '*', '||'];
-    }
-    else {
-        operators = ['+', '*'];
-    }
-    // recursively build all possible combinations
-    const recursiveGeneration = (current, remainingSpaces) => {
-        if (remainingSpaces === 0) {
-            return [current];
+const generateCombinations = (() => {
+    const cache = new Map();
+
+    return (spaces, part) => {
+        const cacheKey = `${spaces}-${part}`;
+
+        if (cache.has(cacheKey)) {
+            return cache.get(cacheKey);
         }
 
-        let results = [];
-        for (const op of operators) {
-            results = results.concat(recursiveGeneration([...current, op], remainingSpaces - 1));
+        let operators;
+        if (part) {
+            operators = ['+', '*', '||'];
+        } else {
+            operators = ['+', '*'];
         }
-        return results;
+
+        // recursive function to generate combinations
+        const recursiveGeneration = (current, remainingSpaces) => {
+            if (remainingSpaces === 0) {
+                return [current];
+            }
+
+            let results = [];
+            for (const op of operators) {
+                results = results.concat(recursiveGeneration([...current, op], remainingSpaces - 1));
+            }
+
+            return results;
+        };
+
+        const result = recursiveGeneration([], spaces);
+        cache.set(cacheKey, result);
+        return result;
     };
-
-    return recursiveGeneration([], spaces);
-}
+})();
