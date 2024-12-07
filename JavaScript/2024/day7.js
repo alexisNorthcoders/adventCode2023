@@ -70,9 +70,10 @@ function calculateEquation(equation) {
 }
 
 function buildEquationAndValidate(numbers, testValue) {
-
+    // build all possible combinations of + and *
     const possibleCombinations = generateCombinations(numbers.length - 1);
 
+    // for each possible combination build the equation and calculate result
     for (const combination of possibleCombinations) {
         let currentEquation = [];
 
@@ -84,7 +85,7 @@ function buildEquationAndValidate(numbers, testValue) {
                 currentEquation.push(combination[i]);
             }
         }
-
+        // calculate result of equation and return if valid
         if (calculateEquation(currentEquation) === Number(testValue)) {
             return true;
         }
@@ -96,7 +97,7 @@ function buildEquationAndValidate(numbers, testValue) {
 function generateCombinations(spaces) {
 
     const operators = ['+', '*'];
-
+    // recursively build all possible combinations
     const recursiveGeneration = (current, remainingSpaces) => {
         if (remainingSpaces === 0) {
             return [current];
