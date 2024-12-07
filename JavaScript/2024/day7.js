@@ -10,139 +10,94 @@ async function day7() {
 
     console.log('🌟 --- Day 7 Results --- 🌟');
     console.time('Total Time');
+    console.time('Parse Input');
+    const { testValues, parsedNumbers } = parseData(lines)
+    console.timeEnd('Parse Input');
     console.time('T1');
-    console.log('📌 Part 1: ', part1(lines));
+    console.log('📌 Part 1: ', part1(testValues, parsedNumbers));
     console.timeEnd('T1');
     console.time('T2');
-    console.log('📌 Part 2: ', part2(lines));
+    console.log('📌 Part 2: ', part2(testValues, parsedNumbers));
     console.timeEnd('T2');
     console.timeEnd('Total Time');
 }
 
-function part1(lines) {
-
+function part1(testValues, parsedNumbers) {
     let validTests = 0
 
-    lines.forEach((line => {
+    parsedNumbers.forEach(((parsedNumbers, i) => {
 
-        let [testValue, numbers] = line.split(':')
-        numbers = numbers.trim().split(' ').map(Number)
-
-        if (buildEquationAndValidate(numbers, testValue) === true) {
-
-            validTests += Number(testValue)
+        if (findValidEquation(parsedNumbers, ['+', '*'], testValues[i])) {
+            validTests += testValues[i]
         }
-    }))
-
+    }
+    ))
     return validTests
-
 }
 
-function part2(lines) {
+function part2(testValues, parsedNumbers) {
     let validTests = 0
 
-    lines.forEach((line => {
+    parsedNumbers.forEach(((parsedNumbers, i) => {
 
-        let [testValue, numbers] = line.split(':')
-        numbers = numbers.trim().split(' ').map(Number)
-
-        if (buildEquationAndValidate(numbers, testValue, true) === true) {
-
-            validTests += Number(testValue)
+        if (findValidEquation(parsedNumbers, ['+', '*', '||'], testValues[i])) {
+            validTests += testValues[i]
         }
-    }))
-
+    }
+    ))
     return validTests
 }
 
 day7()
 
-function calculateEquation(equation) {
-    let result = 0
-
-    let operator = '+'
-    equation.forEach((element) => {
-
-        if (element === '+' || element === '*' || element === '||') {
-            operator = element
-        }
-
-        if (typeof element === 'number') {
-            if (operator === '+') {
-                result += element
-            }
-            else if (operator === '*') {
-                result *= element
-            }
-            else if (operator === '||') {
-                result = Number(result.toString() + element.toString())
-            }
-        }
-    })
-
-    return result
-
-}
-
-
-function buildEquationAndValidate(numbers, testValue, part) {
-    // build all possible combinations of + and *
-    const possibleCombinations = generateCombinations(numbers.length - 1, part);
-
-    // for each possible combination build the equation and calculate result
-    for (const combination of possibleCombinations) {
-        let currentEquation = [];
-
-        for (let i = 0; i < numbers.length; i++) {
-            if (i === numbers.length - 1) {
-                currentEquation.push(numbers[i]);
-            } else {
-                currentEquation.push(numbers[i]);
-                currentEquation.push(combination[i]);
-            }
-        }
-        // calculate result of equation and return if valid
-        if (calculateEquation(currentEquation, part) === Number(testValue)) {
-            return true;
-        }
+function calculatePartialResult(currentResult, operator, nextNumber) {
+    if (operator === '+') {
+        return currentResult + nextNumber;
+    } else if (operator === '*') {
+        return currentResult * nextNumber;
+    } else if (operator === '||') {
+        return Number(currentResult.toString() + nextNumber.toString());
     }
-
-    return false;
+    return currentResult;
 }
 
-const generateCombinations = (() => {
-    const cache = new Map();
+function findValidEquation(numbers, operators, testValue) {
+    function generateAndCheck(currentEquation, index, currentResult, lastOperator) {
 
-    return (spaces, part) => {
-        const cacheKey = `${spaces}-${part}`;
+        if (index === numbers.length - 1) {
+            currentEquation.push(numbers[index]);
+            currentResult = calculatePartialResult(currentResult, lastOperator, numbers[index]);
 
-        if (cache.has(cacheKey)) {
-            return cache.get(cacheKey);
+            if (currentResult === testValue) {
+                return true;
+            }
+            return false;
         }
+        for (let op of operators) {
+            const nextResult = calculatePartialResult(currentResult, lastOperator, numbers[index]);
 
-        let operators;
-        if (part) {
-            operators = ['+', '*', '||'];
-        } else {
-            operators = ['+', '*'];
-        }
-
-        // recursive function to generate combinations
-        const recursiveGeneration = (current, remainingSpaces) => {
-            if (remainingSpaces === 0) {
-                return [current];
+            if (nextResult > testValue) {
+                return false;
             }
 
-            let results = [];
-            for (const op of operators) {
-                results = results.concat(recursiveGeneration([...current, op], remainingSpaces - 1));
+            if (generateAndCheck(currentEquation, index + 1, nextResult, op)) {
+                return true;
             }
+        }
+        return false;
+    }
+    return generateAndCheck([], 0, 0, '+');
+}
 
-            return results;
-        };
+function parseData(lines) {
+    const testValues = []
+    const parsedNumbers = []
+    lines.forEach((line => {
+        let [testValue, numbers] = line.split(':')
+        numbers = numbers.trim().split(' ').map(Number)
+        testValues.push(Number(testValue))
+        parsedNumbers.push(numbers)
+    }))
+    return { testValues, parsedNumbers }
+}
 
-        const result = recursiveGeneration([], spaces);
-        cache.set(cacheKey, result);
-        return result;
-    };
-})();
