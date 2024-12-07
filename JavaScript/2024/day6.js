@@ -1,0 +1,134 @@
+const { readFile } = require("fs/promises");
+
+const path = process.argv.includes("sample") ? "./inputs/sample_day6.txt" : "./inputs/day6.txt";
+
+
+async function day6() {
+
+    const file = await readFile(path, 'utf8')
+    const lines = file.split('\n')
+
+    console.log('🌟 --- Day 6 Results --- 🌟');
+    console.time('Total Time');
+    console.time('T1');
+    console.log('📌 Part 1: ', part1(lines));
+    console.timeEnd('T1');
+    console.time('T2');
+    console.log('📌 Part 2: ', part2(lines));
+    console.timeEnd('T2');
+    console.timeEnd('Total Time');
+}
+/**
+ * 
+ * @param {String[]} lines 
+ * @returns 
+ */
+function part1(lines) {
+    // convert input into matrix
+    const matrix = lines.map(row => row.split(''))
+    // get starting guard coordinates
+    const startingCoords = findCoords(matrix, '^')
+    // create a guard
+    const guard = new Guard(startingCoords.x, startingCoords.y, 'UP')
+    // mark starting spot
+    matrix[guard.y][guard.x] = 'X'
+
+    while (true) {
+        // get coordinates for next guard position
+        let { x, y } = guard.nextPosition()
+        // check if next position is out of bounds
+        if ((x < 0 || x > matrix.length - 1 || y < 0 || y > matrix.length - 1)) {
+            break
+        }
+        let nextPosition = matrix[y][x]
+        // move the guard to the next position
+        guard.move(nextPosition)
+        // mark the spot
+        matrix[guard.y][guard.x] = 'X'
+
+    }
+    // count all X 
+    return matrix.reduce((total, row) =>
+        total + row.reduce((count, char) => char === 'X' ? count + 1 : count, 0),
+        0);
+}
+
+function part2() {
+
+}
+
+day6()
+
+/**
+ * Function to return {x,y} coordinates of a value in a matrix
+ * @param {String[]} matrix 
+ * @param {String} value 
+ * @returns 
+ */
+function findCoords(matrix, value) {
+    for (let y = 0; y < matrix.length; y++) {
+        const x = matrix[y].indexOf(value);
+        if (x !== -1) {
+            return { x, y };
+        }
+    }
+    return null;
+}
+
+class Guard {
+    constructor(x, y, direction) {
+        this.x = x
+        this.y = y
+        this.direction = direction
+    }
+    move(char) {
+        // before moving check if there's a obstacle and change direction
+        this.checkObstacle(char)
+        switch (this.direction) {
+            case 'UP':
+                this.y--
+                break
+            case 'DOWN':
+                this.y++
+                break
+            case 'LEFT':
+                this.x--
+                break
+            case 'RIGHT':
+                this.x++
+                break
+        }
+    }
+    checkObstacle(char) {
+        if (char === '#') {
+            switch (this.direction) {
+                case 'UP':
+                    this.direction = 'RIGHT'
+                    break
+                case 'DOWN':
+                    this.direction = 'LEFT'
+                    break
+                case 'LEFT':
+                    this.direction = 'UP'
+                    break
+                case 'RIGHT':
+                    this.direction = 'DOWN'
+                    break
+            }
+
+        }
+    }
+    nextPosition() {
+        switch (this.direction) {
+            case 'UP':
+                return { x: this.x, y: this.y - 1 }
+            case 'DOWN':
+                return { x: this.x, y: this.y + 1 }
+            case 'LEFT':
+                return { x: this.x - 1, y: this.y }
+            case 'RIGHT':
+                return { x: this.x + 1, y: this.y }
+
+        }
+    }
+}

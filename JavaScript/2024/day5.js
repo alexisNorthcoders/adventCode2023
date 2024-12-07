@@ -27,24 +27,48 @@ function part1(lines) {
 
     pageUpdates.forEach(update => {
 
-        if (checkValidUpdates(update, pageOrders)) validUpdates.push(update[Math.floor(update.length / 2)])
+        // if update is valid push middle value to array
+        if (checkValidUpdates(update, pageOrders)) {
+            validUpdates.push(update[Math.floor(update.length / 2)])
+        }
     })
 
     return validUpdates.reduce((a, b) => a + b)
 }
-
+// WIP
 function part2(lines) {
     const { pageOrders, pageUpdates } = parseInput(lines)
+console.log(pageOrders)
+    const validUpdates = []
 
-    const invalidUpdatesIndexes = []
-
-    pageUpdates.forEach((update,i) => {
-
-        if (!checkValidUpdates(update, pageOrders)) invalidUpdatesIndexes.push(i)
-    })
-
-    console.log(invalidUpdatesIndexes)
-
+    pageUpdates.forEach((update, i) => {
+       
+        let initialInvalide = checkValidUpdates(update, pageOrders)
+       /*  while (!checkValidUpdates(update, pageOrders)) {
+            let swapped = false;
+        
+            for (let i = 0; i < update.length; i++) {
+                for (let j = i + 1; j < update.length; j++) {
+                   
+                    [update[i], update[j]] = [update[j], update[i]];
+        
+                    
+                    if (checkValidUpdates(update, pageOrders)) {
+                        swapped = true; 
+                        break;
+                    }
+        
+                }
+                if (swapped) break;
+            }
+        } */
+        if (!initialInvalide) {
+            validUpdates.push(update[Math.floor(update.length / 2)]);
+        }
+        console.log(i)
+    }
+)
+    return validUpdates.reduce((a, b) => a + b)
 
 }
 
@@ -62,8 +86,9 @@ const parseInput = (() => {
 
         const pageOrders = {};
         const pageUpdates = [];
-        let i = 0;
 
+        let i = 0;
+        // create map with page orders
         while (!lines[i].match(/^$/)) {
             const [left, right] = lines[i].split('|');
             pageOrders[left] = pageOrders[left]
@@ -116,3 +141,17 @@ const checkValidUpdates = (() => {
         return result;
     };
 })();
+function calculatePriority(element, hashmap) {
+    for (const key in hashmap) {
+        const preferences = hashmap[key];
+        const index = preferences.indexOf(element);
+        if (index !== -1) return index; // Lower index means higher priority
+    }
+    return Number.MAX_SAFE_INTEGER; // Lowest priority for missing elements
+}
+
+// Reorder array based on hashmap preferences
+function reorderArray(array, hashmap) {
+    return array.sort((a, b) => calculatePriority(a, hashmap) - calculatePriority(b, hashmap));
+}
+
