@@ -65,10 +65,8 @@ function findValidEquation(numbers, operators, testValue) {
     function generateAndCheck(currentEquation, index, currentResult, lastOperator) {
 
         if (index === numbers.length - 1) {
-            currentEquation.push(numbers[index]);
-            currentResult = calculatePartialResult(currentResult, lastOperator, numbers[index]);
 
-            if (currentResult === testValue) {
+            if (calculatePartialResult(currentResult, lastOperator, numbers[index]) === testValue) {
                 return true;
             }
             return false;
@@ -76,12 +74,12 @@ function findValidEquation(numbers, operators, testValue) {
         for (let op of operators) {
             const nextResult = calculatePartialResult(currentResult, lastOperator, numbers[index]);
 
-            if (nextResult > testValue) {
-                return false;
-            }
-
             if (generateAndCheck(currentEquation, index + 1, nextResult, op)) {
                 return true;
+            }
+            if (nextResult > testValue) {
+                
+                return false;
             }
         }
         return false;
