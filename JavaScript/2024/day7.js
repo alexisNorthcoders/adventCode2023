@@ -21,7 +21,7 @@ async function day7() {
 
 function part1(lines) {
 
-    const validTests = new Set()
+    let validTests = 0
 
     lines.forEach((line => {
 
@@ -30,16 +30,29 @@ function part1(lines) {
 
         if (buildEquationAndValidate(numbers, testValue) === true) {
 
-            validTests.add(Number(testValue))
+            validTests += Number(testValue)
         }
     }))
 
-    return [...validTests].reduce((a, b) => a + b, 0)
+    return validTests
 
 }
 
-function part2() {
+function part2(lines) {
+    let validTests = 0
 
+    lines.forEach((line => {
+
+        let [testValue, numbers] = line.split(':')
+        numbers = numbers.trim().split(' ').map(Number)
+
+        if (buildEquationAndValidate(numbers, testValue, true) === true) {
+
+            validTests += Number(testValue)
+        }
+    }))
+
+    return validTests
 }
 
 day7()
@@ -49,18 +62,20 @@ function calculateEquation(equation) {
 
     let operator = '+'
     equation.forEach((element) => {
-        if (element === '+') {
-            operator = '+'
+
+        if (element === '+' || element === '*' || element === '||') {
+            operator = element
         }
-        else if (element === '*') {
-            operator = '*'
-        }
+
         if (typeof element === 'number') {
             if (operator === '+') {
                 result += element
             }
             else if (operator === '*') {
                 result *= element
+            }
+            else if (operator === '||') {
+                result = Number(result.toString() + element.toString())
             }
         }
     })
@@ -69,9 +84,10 @@ function calculateEquation(equation) {
 
 }
 
-function buildEquationAndValidate(numbers, testValue) {
+
+function buildEquationAndValidate(numbers, testValue, part) {
     // build all possible combinations of + and *
-    const possibleCombinations = generateCombinations(numbers.length - 1);
+    const possibleCombinations = generateCombinations(numbers.length - 1, part);
 
     // for each possible combination build the equation and calculate result
     for (const combination of possibleCombinations) {
@@ -86,7 +102,7 @@ function buildEquationAndValidate(numbers, testValue) {
             }
         }
         // calculate result of equation and return if valid
-        if (calculateEquation(currentEquation) === Number(testValue)) {
+        if (calculateEquation(currentEquation, part) === Number(testValue)) {
             return true;
         }
     }
@@ -94,9 +110,14 @@ function buildEquationAndValidate(numbers, testValue) {
     return false;
 }
 
-function generateCombinations(spaces) {
-
-    const operators = ['+', '*'];
+function generateCombinations(spaces, part) {
+    let operators
+    if (part) {
+        operators = ['+', '*', '||'];
+    }
+    else {
+        operators = ['+', '*'];
+    }
     // recursively build all possible combinations
     const recursiveGeneration = (current, remainingSpaces) => {
         if (remainingSpaces === 0) {
