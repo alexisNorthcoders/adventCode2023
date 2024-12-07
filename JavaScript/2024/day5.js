@@ -38,7 +38,7 @@ function part1(lines) {
 // WIP
 function part2(lines) {
     const { pageOrders, pageUpdates } = parseInput(lines)
-console.log(pageOrders)
+//console.log(pageOrders)
     const validUpdates = []
 
     pageUpdates.forEach((update, i) => {
@@ -65,7 +65,7 @@ console.log(pageOrders)
         if (!initialInvalide) {
             validUpdates.push(update[Math.floor(update.length / 2)]);
         }
-        console.log(i)
+       // console.log(i)
     }
 )
     return validUpdates.reduce((a, b) => a + b)
