@@ -43,6 +43,12 @@ function part1(lines) {
         let nextPosition = matrix[y][x]
         // move the guard to the next position
         guard.move(nextPosition)
+        // do a 180 if blocked in 2 ways
+        if (matrix[guard.y][guard.x] === '#') {
+            guard.x = x
+            guard.y = y
+            guard.move('#')
+        }
         // mark the spot
         matrix[guard.y][guard.x] = 'X'
 
@@ -53,8 +59,52 @@ function part1(lines) {
         0);
 }
 
-function part2() {
+function part2(lines) {
 
+    let obstacles = 0
+    // convert input into matrix
+    const matrix = lines.map(row => row.split(''))
+    // get starting guard coordinates
+    const startingCoords = findCoords(matrix, '^')
+    // create a guard
+    const guard = new Guard(startingCoords.x, startingCoords.y, 'UP')
+
+    matrix.forEach((row) => row.forEach((char, i) => {
+        // reset guard position
+        guard.reset()
+
+        if (char === '.') {
+            row[i] = 'O'
+
+            while (true) {
+                // get coordinates for next guard position
+                let { x, y } = guard.nextPosition()
+                // check if next position is out of bounds
+                if ((x < 0 || x > matrix.length - 1 || y < 0 || y > matrix.length - 1)) {
+                    row[i] = '.'
+
+                    break
+                }
+                if (guard.insideLoop()) {
+                    obstacles++
+                    row[i] = '.'
+                    break
+                }
+                let nextPosition = matrix[y][x]
+                // move the guard to the next position
+                guard.move(nextPosition)
+
+                // do a 180 if blocked in 2 ways
+                if (matrix[guard.y][guard.x] === '#' || matrix[guard.y][guard.x] === 'O') {
+                    guard.x = x
+                    guard.y = y
+                    guard.move('#')
+                }
+            }
+        }
+    }))
+
+    return obstacles
 }
 
 day6()
@@ -77,12 +127,27 @@ function findCoords(matrix, value) {
 
 class Guard {
     constructor(x, y, direction) {
+        this.xi = x
+        this.yi = y
+        this.directioni = direction
         this.x = x
         this.y = y
         this.direction = direction
+        this.history = new Map()
+        this.steps = 0
+    }
+    reset() {
+        this.x = this.xi
+        this.y = this.yi
+        this.direction = this.directioni
+        this.history = new Map()
+        this.steps = 0
+    }
+    insideLoop() {
+        return this.steps > this.history.size
     }
     move(char) {
-        // before moving check if there's a obstacle and change direction
+        // before moving check if there's an obstacle and change direction
         this.checkObstacle(char)
         switch (this.direction) {
             case 'UP':
@@ -98,9 +163,11 @@ class Guard {
                 this.x++
                 break
         }
+        this.steps++
+        this.history.set(JSON.stringify({ x: this.x, y: this.y, direction: this.direction }))
     }
     checkObstacle(char) {
-        if (char === '#') {
+        if (char === '#' || char == 'O') {
             switch (this.direction) {
                 case 'UP':
                     this.direction = 'RIGHT'
