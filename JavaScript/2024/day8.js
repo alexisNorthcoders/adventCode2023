@@ -25,11 +25,11 @@ async function day8() {
 function part1(matrix) {
     // create set to store unique antinodes
     const antinodes = new Set()
-    // find all symbols which can create antinodes
+    // find all symbols / antennas
     const uniqueSymbols = findUniqueSymbols(matrix)
 
     uniqueSymbols.forEach((symbol) => {
-        // for each unique symbol find all coordinates
+        // for each unique symbol find their coordinates
         const coords = findSymbol(matrix, symbol)
         // get all possible lines from symbols
         const allLines = getAllLines(coords)
@@ -53,11 +53,11 @@ function part1(matrix) {
 function part2(matrix) {
     // create set to store unique antinodes
     const antinodes = new Set()
-    // find all symbols which can create antinodes
+    // find all symbols / antennas
     const uniqueSymbols = findUniqueSymbols(matrix)
 
     uniqueSymbols.forEach((symbol) => {
-        // for each unique symbol find all coordinates
+        // for each unique symbol find their coordinates
         const coords = findSymbol(matrix, symbol)
         // get all possible lines from symbols
         const allLines = getAllLines(coords)
@@ -94,7 +94,13 @@ function calculateCollinearPoints(A, B) {
 
     return [C, D];
 }
-
+/**
+ * Find collinear points that land on the grid
+ * @param {Number[]} A 
+ * @param {Number[]} B 
+ * @param {Number} matrixSize 
+ * @returns 
+ */
 function calculateAllCollinearPoints(A, B, matrixSize) {
     const [x1, y1] = A;
     const [x2, y2] = B;
