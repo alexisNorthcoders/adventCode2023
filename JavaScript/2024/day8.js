@@ -28,7 +28,6 @@ function part1(matrix) {
     // find all symbols which can create antinodes
     const uniqueSymbols = findUniqueSymbols(matrix)
 
-
     uniqueSymbols.forEach((symbol) => {
         // for each unique symbol find all coordinates
         const coords = findSymbol(matrix, symbol)
@@ -52,7 +51,25 @@ function part1(matrix) {
 }
 
 function part2(matrix) {
+    // create set to store unique antinodes
+    const antinodes = new Set()
+    // find all symbols which can create antinodes
+    const uniqueSymbols = findUniqueSymbols(matrix)
 
+    uniqueSymbols.forEach((symbol) => {
+        // for each unique symbol find all coordinates
+        const coords = findSymbol(matrix, symbol)
+        // get all possible lines from symbols
+        const allLines = getAllLines(coords)
+
+        allLines.forEach((line) => {
+            // calculate the antinodes
+            const collinearPoints = calculateAllCollinearPoints(line[0], line[1], matrix.length)
+            // add antinodes to set
+            collinearPoints.forEach(point => antinodes.add(JSON.stringify(point)))
+        })
+    })
+    return antinodes.size
 }
 
 day8()
@@ -76,6 +93,26 @@ function calculateCollinearPoints(A, B) {
     const D = [x2 + dx, y2 + dy];
 
     return [C, D];
+}
+
+function calculateAllCollinearPoints(A, B, matrixSize) {
+    const [x1, y1] = A;
+    const [x2, y2] = B;
+
+    const dx = x2 - x1;
+    const dy = y2 - y1;
+
+    const points = [];
+
+    for (let x = 0; x < matrixSize; x++) {
+        for (let y = 0; y < matrixSize; y++) {
+            if ((y - y1) * dx === (x - x1) * dy) {
+                points.push([x, y]);
+            }
+        }
+    }
+
+    return points;
 }
 
 /**
