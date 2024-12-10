@@ -35,7 +35,14 @@ function part1(matrix) {
 }
 
 function part2(matrix) {
+    let score = 0
+    const trailheads = findTrailheads(matrix, 0)
 
+    for (let coords of trailheads) {
+        score += findTrails(matrix, coords)
+    }
+
+    return score
 }
 
 day10()
@@ -95,6 +102,47 @@ function findFullTrails(matrix, coords, visited = new Set()) {
     }
     if (right !== null && currentSpot + 1 === right) {
         score += findFullTrails(matrix, [y, x + 1], visited);
+    }
+
+    return score;
+}
+
+function findTrails(matrix, coords) {
+    
+    const [y, x] = coords;
+
+    // check if coords are out of bounds
+    if (x < 0 || y < 0 || y >= matrix.length || x >= matrix[0].length) {
+        return 0;
+    }
+
+    const currentSpot = matrix[y][x];
+
+    // base case when we hit the highest point
+    if (currentSpot === 9) {
+        return 1;
+    }
+
+    let score = 0;
+
+    // check if surrounding directions are out of bounds
+    const up = y > 0 ? matrix[y - 1][x] : null;
+    const down = y < matrix.length - 1 ? matrix[y + 1][x] : null;
+    const left = x > 0 ? matrix[y][x - 1] : null;
+    const right = x < matrix[0].length - 1 ? matrix[y][x + 1] : null;
+
+    // check if next spot increases by 1
+    if (up !== null && currentSpot + 1 === up) {
+        score += findTrails(matrix, [y - 1, x]);
+    }
+    if (down !== null && currentSpot + 1 === down) {
+        score += findTrails(matrix, [y + 1, x]);
+    }
+    if (left !== null && currentSpot + 1 === left) {
+        score += findTrails(matrix, [y, x - 1]);
+    }
+    if (right !== null && currentSpot + 1 === right) {
+        score += findTrails(matrix, [y, x + 1]);
     }
 
     return score;
