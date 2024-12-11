@@ -23,11 +23,12 @@ async function day11() {
 
 function part1(input) {
 
-    return countStones(input, 25)
+    return recursiveCountStones(input, 25)
 }
 
-function part2() {
+function part2(input) {
 
+    return recursiveCountStones(input, 75)
 }
 
 day11()
@@ -43,27 +44,85 @@ function parseData(input) {
  * @param {Number} limit 
  * @returns 
  */
-function countStones(stones, blinks, counter = 0, n = stones.length) {
+function countStones(stones, blinks, counter = 0) {
+    // Map to store counts
+    let stoneMap = new Map();
 
-    if (counter >= blinks) {
-        return n;
+    for (let stone of stones) {
+        // if Map already has the stone, add 1 more
+        stoneMap.set(stone, (stoneMap.get(stone) || 0) + 1);
     }
-    counter++;
-    let newStones = [];
 
-    for (let i = 0; i < stones.length; i++) {
-        if (stones[i] === 0) {
-            newStones.push(1);
+    while (counter < blinks) {
+        counter++;
+        let newStoneMap = new Map();
 
-        } else if (stones[i].toString().length % 2 === 0) {
-            const stoneString = stones[i].toString();
-            const firstPart = Number(stoneString.substring(0, stoneString.length / 2));
-            const secondPart = Number(stoneString.substring(stoneString.length / 2));
-            newStones.push(firstPart, secondPart);
-            n += 1;
-        } else {
-            newStones.push(stones[i] * 2024);
+        for (let [stone, count] of stoneMap.entries()) {
+            if (stone === 0) {
+                // when stone is 0 add 1 to stone 1
+                newStoneMap.set(1, (newStoneMap.get(1) || 0) + count);
+            } else if (stone.toString().length % 2 === 0) {
+                // split stone
+                const stoneString = stone.toString();
+                const firstPart = Number(stoneString.substring(0, stoneString.length / 2));
+                const secondPart = Number(stoneString.substring(stoneString.length / 2));
+
+                // add each stone counts
+                newStoneMap.set(firstPart, (newStoneMap.get(firstPart) || 0) + count);
+                newStoneMap.set(secondPart, (newStoneMap.get(secondPart) || 0) + count);
+            } else {
+                // multiply and add the count
+                const newStone = stone * 2024;
+                newStoneMap.set(newStone, (newStoneMap.get(newStone) || 0) + count);
+            }
+        }
+
+        // update stone map after blink
+        stoneMap = newStoneMap;
+    }
+
+    let totalStones = 0;
+    for (let count of stoneMap.values()) {
+        totalStones += count;
+    }
+
+    return totalStones;
+}
+
+function recursiveCountStones(stones, blinks, counter = -1, stoneMap = null) {
+
+    if (!stoneMap) {
+        stoneMap = new Map();
+        for (let stone of stones) {
+            stoneMap.set(stone, (stoneMap.get(stone) || 0) + 1);
         }
     }
-    return countStones(newStones, blinks, counter, n);
+
+    if (counter > blinks) {
+        let totalStones = 0;
+        for (let count of stoneMap.values()) {
+            totalStones += count;
+        }
+        return totalStones;
+    }
+
+    let newStoneMap = new Map();
+
+    for (let [stone, count] of stoneMap.entries()) {
+        if (stone === 0) {
+            newStoneMap.set(1, (newStoneMap.get(1) || 0) + count);
+        } else if (stone.toString().length % 2 === 0) {
+            const stoneString = stone.toString();
+            const firstPart = Number(stoneString.substring(0, stoneString.length / 2));
+            const secondPart = Number(stoneString.substring(stoneString.length / 2));
+
+            newStoneMap.set(firstPart, (newStoneMap.get(firstPart) || 0) + count);
+            newStoneMap.set(secondPart, (newStoneMap.get(secondPart) || 0) + count);
+        } else {
+            const newStone = stone * 2024;
+            newStoneMap.set(newStone, (newStoneMap.get(newStone) || 0) + count);
+        }
+    }
+
+    return countStones(stones, blinks, counter + 1, newStoneMap);
 }
