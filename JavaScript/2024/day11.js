@@ -40,8 +40,8 @@ function parseData(input) {
 /**
  * 
  * @param {Number[]} stones 
+ * @param {Number} blinks 
  * @param {Number} counter 
- * @param {Number} limit 
  * @returns 
  */
 function countStones(stones, blinks, counter = 0) {
@@ -89,6 +89,14 @@ function countStones(stones, blinks, counter = 0) {
     return totalStones;
 }
 
+/**
+ * 
+ * @param {Number[]} stones 
+ * @param {Number} blinks 
+ * @param {Number} counter 
+ * @param {Map} stoneMap
+ * @returns 
+ */
 function recursiveCountStones(stones, blinks, counter = -1, stoneMap = null) {
 
     if (!stoneMap) {
