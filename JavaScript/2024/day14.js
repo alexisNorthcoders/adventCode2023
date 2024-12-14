@@ -39,7 +39,27 @@ function part1(robots) {
 }
 
 function part2(robots) {
+    const robotsCollection = robots.map((robot) => new Robot(...robot, 101, 103))
 
+    let counter = 0
+    let clusterDetected = false
+
+    while (!clusterDetected) {
+        counter++
+        robotsCollection.forEach(robot => robot.move(1));
+
+        const matrix = Array.from({ length: 103 }, () => Array(101).fill('.'));
+        robotsCollection.forEach(robot => {
+            if (robot.y >= 0 && robot.y < 103 && robot.x >= 0 && robot.x < 101) {
+                matrix[robot.y][robot.x] = 'R';
+            }
+        });
+        // adjust cluster size to find the christmas tree
+        clusterDetected = detectCluster(matrix, 20)
+    }
+    renderRobots(robotsCollection, 101, 103);
+
+    return counter
 }
 
 day14()
@@ -86,3 +106,62 @@ class Robot {
         }
     }
 }
+
+function renderRobots(robotsCollection, limitx, limity) {
+
+    const matrix = Array.from({ length: limity }, () => Array(limitx).fill('.'));
+
+    robotsCollection.forEach((robot) => {
+        if (robot.y >= 0 && robot.y < limity && robot.x >= 0 && robot.x < limitx) {
+            matrix[robot.y][robot.x] = 'R';
+        }
+    });
+
+    console.log(matrix.map(row => row.join(' ')).join('\n'));
+};
+
+const detectCluster = (matrix, clusterSize) => {
+    const rows = matrix.length;
+    const cols = matrix[0].length;
+
+    for (let y = 0; y < rows; y++) {
+        for (let x = 0; x < cols; x++) {
+            if (matrix[y][x] === 'R') {
+                const count = countRobotsAround(matrix, x, y, clusterSize);
+                if (count >= clusterSize) {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+};
+
+const countRobotsAround = (matrix, startX, startY, clusterSize) => {
+    const rows = matrix.length;
+    const cols = matrix[0].length;
+    const visited = new Set();
+
+    let stack = [[startX, startY]];
+    let count = 0;
+
+    while (stack.length > 0) {
+        const [x, y] = stack.pop();
+        const key = `${x},${y}`;
+
+        if (visited.has(key)) continue;
+        visited.add(key);
+
+        if (x >= 0 && x < cols && y >= 0 && y < rows && matrix[y][x] === 'R') {
+            count++;
+            if (count >= clusterSize) return count;
+
+
+            stack.push([x - 1, y]);
+            stack.push([x + 1, y]);
+            stack.push([x, y - 1]);
+            stack.push([x, y + 1]);
+        }
+    }
+    return count;
+};
