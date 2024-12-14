@@ -23,25 +23,43 @@ async function day13() {
 
 function part1(machines) {
 
+    let cost = 0
+
     results = machines.map((machines) => solveSystemEquations(...machines))
 
-    const cost = results.map(result => {
+    results.forEach(result => {
         if (Number.isInteger(result.A) && Number.isInteger(result.B)) {
-            return result.A * 3 + result.B
+            cost += result.A * 3 + result.B
         }
-    }).filter(Boolean)
+    })
 
-    return cost.reduce((a, b) => a + b)
+    return cost
 }
 
 function part2(machines) {
 
+    let cost = 0
+
+    machines.forEach((machine) => {
+        machine[4] += 10000000000000
+        machine[5] += 10000000000000
+    })
+
+    results = machines.map((machines) => solveSystemEquations(...machines))
+
+    results.forEach(result => {
+        if (Number.isInteger(result.A) && Number.isInteger(result.B)) {
+            cost += result.A * 3 + result.B
+        }
+    })
+
+    return cost
 }
 
 day13()
 
 function parse(input) {
-
+    // only get the numbers for each machine
     const machines = input.split("\n\n").map(machine => Array.from(machine.matchAll(/\d+/g), match => Number(match[0])));
 
     return machines
