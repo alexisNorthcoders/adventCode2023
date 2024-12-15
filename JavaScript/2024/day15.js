@@ -22,15 +22,13 @@ async function day15() {
     console.timeEnd('Total Time');
 }
 
-let boxes = []
-let walls = []
-let size = 1
+
 
 function part1({ wallsCoords, robotCoords, boxesCoords, movements }) {
 
-    boxes = boxesCoords.map(box => new Box(box.x, box.y, size));
-    const robot = new Robot(robotCoords.x, robotCoords.y, size);
-    walls = wallsCoords.map((wall) => new Wall(wall.x, wall.y, size))
+    boxes = boxesCoords.map(box => new Box(box.x, box.y, 1));
+    const robot = new Robot(robotCoords.x, robotCoords.y, 1);
+    walls = wallsCoords.map((wall) => new Wall(wall.x, wall.y, 1))
 
     movements.forEach((movement) => {
         switch (movement) {
@@ -102,16 +100,16 @@ class Robot {
 
         switch (direction) {
             case 'up':
-                newY -= size;
+                newY -= this.size;
                 break;
             case 'down':
-                newY += size;
+                newY += this.size;
                 break;
             case 'left':
-                newX -= size;
+                newX -= this.size;
                 break;
             case 'right':
-                newX += size;
+                newX += this.size;
                 break;
         }
 
@@ -160,16 +158,16 @@ class Box {
 
         switch (direction) {
             case 'up':
-                newY -= size;
+                newY -= this.size;
                 break;
             case 'down':
-                newY += size;
+                newY += this.size;
                 break;
             case 'left':
-                newX -= size;
+                newX -= this.size;
                 break;
             case 'right':
-                newX += size;
+                newX += this.size;
                 break;
         }
 
