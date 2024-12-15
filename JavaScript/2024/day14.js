@@ -55,7 +55,7 @@ function part2(robots) {
             }
         });
         // adjust cluster size to find the christmas tree
-        clusterDetected = detectCluster(matrix, 20)
+        clusterDetected = detectCluster(matrix, 18)
     }
     renderRobots(robotsCollection, 101, 103);
 
