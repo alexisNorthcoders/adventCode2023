@@ -47,7 +47,7 @@ class Box {
         return true
     }
     checkCollision(newX, newY, direction) {
-
+        // Check collision with walls
         for (const wall of walls) {
             if (
                 newX < wall.x + wall.width &&
@@ -58,6 +58,9 @@ class Box {
                 return true;
             }
         }
+
+        let allTrue = [];
+
         for (const box of boxes) {
             if (box === this) continue;
 
@@ -67,10 +70,15 @@ class Box {
                 newY < box.y + box.height &&
                 newY + this.height > box.y
             ) {
-                console.log(box)
-                return box.move(direction)
+                allTrue.push(box.move(direction));
             }
         }
-        return false;
+
+        if (allTrue.length === 0) {
+            return false;
+        }
+
+        return allTrue.some(value => value === true);
     }
+
 }

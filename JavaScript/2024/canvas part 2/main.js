@@ -16,9 +16,25 @@ let scale
     boxes = boxesCoords.map(box => new Box(box.x * scale, box.y * scale, scale, "orange"));
     const robot = new Robot(robotCoords.x * scale, robotCoords.y * scale, scale, "darkgrey");
     walls = wallsCoords.map((wall) => new Wall(wall.x * scale, wall.y * scale, scale))
-    console.log(movements)
-    console.log(boxes)
     let movementIndex = 0
+    movements.forEach(movement=>{
+        switch (movement) {
+            case ">":
+                robot.move('right');
+                break;
+            case "<":
+                robot.move('left');
+                break;
+            case "^":
+                robot.move('up');
+                break;
+            case "v":
+                robot.move('down');
+                break;
+        }
+
+    })
+    console.log(boxes.reduce((a, b) => a + (b.x / scale) + 100 * (b.y / scale), 0))
     function performMovement() {
 
         const movement = movements[movementIndex];
@@ -47,14 +63,15 @@ let scale
         walls.forEach(wall => wall.draw())
         boxes.forEach(box => box.draw())
         robot.draw()
-       /*  if (movementIndex < movements.length){
+      /*   if (movementIndex < movements.length) {
             performMovement()
             movementIndex++
         }
-        if (movementIndex === movements.length - 1){
-            console.log(boxes.reduce((a, b) => a + (b.x/scale) + 100 * (b.y/scale), 0))
-         }
- */
+        if (movementIndex === movements.length - 1) {
+            console.log("What is the sum of all boxes' final GPS coordinates?")
+            console.log(boxes.reduce((a, b) => a + (b.x / scale) + 100 * (b.y / scale), 0))
+        } */
+
         requestAnimationFrame(animate);
     }
 
