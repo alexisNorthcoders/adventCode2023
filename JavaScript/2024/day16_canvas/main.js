@@ -3,6 +3,7 @@ const ctx = mazeCanvas.getContext("2d");
 let walls;
 let scale;
 let end;
+let reindeer
 (async () => {
   const { wallsCoords, reindeerCoords, endCoords, size } = await parseText();
   width = size * 50;
@@ -11,7 +12,7 @@ let end;
   mazeCanvas.width = width;
   mazeCanvas.height = height;
 
-  const reindeer = new Reindeer(
+   reindeer = new Reindeer(
     reindeerCoords.x * scale,
     reindeerCoords.y * scale,
     scale
@@ -40,18 +41,6 @@ let end;
     walls.forEach((wall) => wall.draw());
     reindeer.draw();
     end.draw();
-
-    if (pathIndex < path.length) {
-      const { action, clockwise } = path[pathIndex];
-
-      if (action === "move") {
-        reindeer.move();
-      } else if (action === "turn") {
-        reindeer.changeDirection(clockwise);
-      }
-
-      pathIndex++;
-    }
 
     if (reindeer.checkFinish()) drawCompletionMessage();
 
@@ -117,5 +106,5 @@ function drawCompletionMessage() {
   ctx.font = "30px sans-serif";
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
-  ctx.fillText("Maze completed!", mazeCanvas.width / 2, mazeCanvas.height / 2);
+  ctx.fillText(`Maze completed! ${reindeer.points}`, mazeCanvas.width / 2, mazeCanvas.height / 2);
 }

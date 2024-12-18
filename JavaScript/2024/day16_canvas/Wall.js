@@ -6,7 +6,7 @@ class Wall {
     }
     draw() {
         const { x, y, size } = this
-        ctx.fillStyle = 'lightgreen';
+        ctx.fillStyle = 'darkblue';
 
         ctx.fillRect(x, y, size, size);
 
