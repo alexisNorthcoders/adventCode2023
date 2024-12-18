@@ -5,7 +5,7 @@ class Reindeer {
     this.size = size;
     this.colour = colour;
     this.direction = "right";
-    this.actions = 0;
+    this.points = 0;
   }
 
   draw() {
@@ -18,10 +18,10 @@ class Reindeer {
     // eyes
     const eyeSize = size * 0.1;
     ctx.fillStyle = "black";
-    // Set eye positions based on direction
+
     let eyeX1, eyeX2, eyeY;
 
-    switch (this.direction) {
+    switch (direction) {
       case "up":
         eyeX1 = x + size * 0.35;
         eyeX2 = x + size * 0.65;
@@ -63,7 +63,7 @@ class Reindeer {
     }
 
     this.direction = directions[currentIndex];
-    this.actions += 1;
+    this.points += 1000;
   }
   move() {
     let newX = this.x;
@@ -87,7 +87,7 @@ class Reindeer {
     if (!this.checkCollision(newX, newY)) {
       this.x = newX;
       this.y = newY;
-      this.actions += 1;
+      this.points += 1;
     }
   }
   checkFinish() {
@@ -99,8 +99,9 @@ class Reindeer {
     ) {
       return true;
     }
+    return false
   }
-  checkCollision(newX, newY, direction) {
+  checkCollision(newX, newY) {
     for (const wall of walls) {
       if (
         newX < wall.x + wall.size &&
@@ -112,5 +113,58 @@ class Reindeer {
       }
     }
     return false;
+  }
+  findShortestPath(end) {
+    const directions = ["up", "right", "down", "left"];
+    const priorityQueue = new PriorityQueue((a, b) => a.cost < b.cost);
+    const visited = new Set();
+    const actions = [];
+  
+    priorityQueue.enqueue({ x: this.x, y: this.y, direction: this.direction, cost: 0, path: [] });
+  
+    while (!priorityQueue.isEmpty()) {
+      const { x, y, direction, cost, path } = priorityQueue.dequeue();
+  
+      // return path when reindeer is on the end tile
+      if (x === end.x * scale && y === end.y * scale) {
+        return path; 
+      }
+  
+      const stateKey = `${x},${y},${direction}`;
+      if (visited.has(stateKey)) continue;
+      visited.add(stateKey);
+  
+      // move in the current direction (cost = 1)
+      let newX = x, newY = y;
+      switch (direction) {
+        case "up": newY -= scale; break;
+        case "down": newY += scale; break;
+        case "left": newX -= scale; break;
+        case "right": newX += scale; break;
+      }
+      if (!this.checkCollision(newX, newY)) {
+        priorityQueue.enqueue({
+          x: newX,
+          y: newY,
+          direction,
+          cost: cost + 1,
+          path: [...path, { action: "move" }]
+        });
+      }
+  
+      // change direction (clockwise and counterclockwise, cost = 1000)
+      for (let i = 0; i < 2; i++) {
+        const newDirection = directions[(directions.indexOf(direction) + (i === 0 ? 1 : -1) + 4) % 4];
+        priorityQueue.enqueue({
+          x,
+          y,
+          direction: newDirection,
+          cost: cost + 1000,
+          path: [...path, { action: "turn", clockwise: i === 0 }]
+        });
+      }
+    }
+    // if no valid path
+    return [];
   }
 }
