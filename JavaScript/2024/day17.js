@@ -23,6 +23,60 @@ async function day17() {
 }
 
 function part1({ register, program }) {
+  return runProgram({ register, program });
+}
+
+function part2({ register, program }) {
+  let res = 0; 
+  register[0] = res;
+  
+  for (let len = program.length - 1; len >= 0; len--) {
+
+    res *= 8;
+    const target = program.slice(len).join(",");
+
+    while (true) {
+
+      const output = runProgram({ register, program });
+
+     
+      if (output === target) {
+        break; 
+      }
+
+      res++;
+      register[0] = res;
+    }
+
+    register[0] = res;
+  }
+
+  return res; 
+};
+
+day17();
+
+function parseText(lines) {
+  const register = [];
+
+  let row = 0;
+
+  while (lines[row] !== "") {
+    register.push(Number(lines[row].match(/[0-9]+/)[0]));
+    row++;
+  }
+  row++;
+  const numbers = [...lines[row].matchAll(/[0-9]+/g)];
+
+  const program = numbers.map(Number);
+
+  return { register, program };
+}
+
+function runProgram({ register, program }) {
+  register = register.slice();
+  program = program.slice();
+
   let instructionPointer = 0;
   let output = "";
 
@@ -61,7 +115,8 @@ function part1({ register, program }) {
         register[1] = register[1] ^ register[2];
         break;
       case 5:
-        output += (combo[operand] % 8) + ",";
+        // use bitwise AND instead of modulo 8, otherwise it wont work for big numbers needed for part 2
+        output += (combo[operand] & 7) + ",";
         break;
       case 6:
         register[1] = Math.floor(register[0] / 2 ** combo[operand]);
@@ -72,28 +127,7 @@ function part1({ register, program }) {
     }
     instructionPointer += 2;
   }
-  
-  output = output.replace(/,$/, '');
+
+  output = output.replace(/,$/, "");
   return output;
-}
-
-function part2({ register, program }) {}
-
-day17();
-
-function parseText(lines) {
-  const register = [];
-
-  let row = 0;
-
-  while (lines[row] !== "") {
-    register.push(Number(lines[row].match(/[0-9]+/)[0]));
-    row++;
-  }
-  row++;
-  const numbers = [...lines[row].matchAll(/[0-9]+/g)];
-
-  const program = numbers.map(Number);
-
-  return { register, program };
 }
