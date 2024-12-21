@@ -86,7 +86,7 @@ async function parseText() {
     const movements = []
 
     // Fetch the file content
-    const response = await fetch('../inputs/day15.txt');
+    const response = await fetch('../inputs/sample_day15.txt');
 
     const text = await response.text();
 
