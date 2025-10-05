@@ -1,10 +1,10 @@
 package com.adventofcode.aoc2019;
 
-import com.adventofcode.aoc2019.utils.InputReader;
-import com.adventofcode.aoc2019.utils.Timer;
-
 import java.io.IOException;
 import java.util.List;
+
+import com.adventofcode.aoc2019.utils.InputReader;
+import com.adventofcode.aoc2019.utils.Timer;
 
 /**
  * Solution for Advent of Code 2019 Day 1.
@@ -62,8 +62,17 @@ public class Day1 {
      * @return the result for Part 2
      */
     private long part2(List<String> input) {
-        // TODO: Implement Part 2 logic here
-        // This is where you'll put your problem-solving logic
-        return 0;
+        int fuelSum = 0;
+        for (String mass:input){
+            int fuel = Integer.parseInt(mass)/3-2;
+
+            while (fuel > 0){
+                fuelSum += fuel;
+                fuel = fuel/3-2;
+            }
+            
+        }
+        
+        return fuelSum;
     }
 }
