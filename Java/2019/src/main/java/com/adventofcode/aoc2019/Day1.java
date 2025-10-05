@@ -47,15 +47,12 @@ public class Day1 {
      * @return the result for Part 1
      */
     private long part1(List<String> input) {
+        int fuelSum = 0;
         for (String mass:input){
-            System.out.println(mass);
+            fuelSum += Integer.parseInt(mass)/3-2;
         }
-
         
-        // TODO: Implement Part 1 logic here
-        // This is where you'll put your problem-solving logic
-        
-        return 0;
+        return fuelSum;
     }
 
     /**
