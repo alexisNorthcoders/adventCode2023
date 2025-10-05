@@ -47,8 +47,14 @@ public class Day1 {
      * @return the result for Part 1
      */
     private long part1(List<String> input) {
+        for (String mass:input){
+            System.out.println(mass);
+        }
+
+        
         // TODO: Implement Part 1 logic here
         // This is where you'll put your problem-solving logic
+        
         return 0;
     }
 
