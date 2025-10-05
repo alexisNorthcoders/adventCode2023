@@ -2,7 +2,6 @@ package com.adventofcode.aoc2019.utils;
 
 /**
  * Utility class for timing code execution.
- * Similar to JavaScript's console.time() and console.timeEnd().
  */
 public class Timer {
     

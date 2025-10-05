@@ -7,12 +7,12 @@ import com.adventofcode.aoc2019.utils.InputReader;
 import com.adventofcode.aoc2019.utils.Timer;
 
 /**
- * Solution for Advent of Code 2019 Day 1.
+ * Solution for Advent of Code 2019 Day 2.
  */
-public class Day1 {
+public class Day2 {
 
     /**
-     * Runs the Day 1 solution.
+     * Runs the Day 2 solution.
      * This method is called by the Main class using reflection.
      *
      * @param useSample whether to use sample input
@@ -20,7 +20,7 @@ public class Day1 {
     public void run(boolean useSample) {
         try {
             // Read input file
-            List<String> lines = InputReader.readLines(1, useSample);
+            List<String> lines = InputReader.readLines(2, useSample);
 
             // Time Part 1
             Timer part1Timer = Timer.start("Part 1");
@@ -40,38 +40,26 @@ public class Day1 {
     }
 
     /**
-     * Solves Part 1 of Day 1.
+     * Solves Part 1 of Day 2.
      *
      * @param input list of input lines
      * @return the result for Part 1
      */
     private long part1(List<String> input) {
-        int fuelSum = 0;
-        for (String mass:input){
-            fuelSum += Integer.parseInt(mass)/3-2;
-        }
-        
-        return fuelSum;
+        // TODO: Implement Part 1 logic here
+        // This is where you'll put your problem-solving logic
+        return 0;
     }
 
     /**
-     * Solves Part 2 of Day 1.
+     * Solves Part 2 of Day 2.
      *
      * @param input list of input lines
      * @return the result for Part 2
      */
     private long part2(List<String> input) {
-        int fuelSum = 0;
-        for (String mass:input){
-            int fuel = Integer.parseInt(mass)/3-2;
-
-            while (fuel > 0){
-                fuelSum += fuel;
-                fuel = fuel/3-2;
-            }
-            
-        }
-        
-        return fuelSum;
+        // TODO: Implement Part 2 logic here
+        // This is where you'll put your problem-solving logic
+        return 0;
     }
 }

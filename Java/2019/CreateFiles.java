@@ -103,7 +103,6 @@ public class CreateFiles {
 
             /**
              * Solution for Advent of Code 2019 Day %d.
-             * This class follows the same pattern as your JavaScript day files.
              */
             public class Day%d {
                 
@@ -115,7 +114,7 @@ public class CreateFiles {
                  */
                 public void run(boolean useSample) {
                     try {
-                        // Read input file (similar to your readFile in JavaScript)
+                        // Read input file
                         List<String> lines = InputReader.readLines(%d, useSample);
                         
                         // Time Part 1
