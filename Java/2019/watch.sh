@@ -9,8 +9,8 @@ run_code() {
     mvn compile -q
     if [ $? -eq 0 ]; then
         echo "✅ Compilation successful!"
-        echo "🚀 Running Day 1 with sample input..."
-        java -cp target/classes com.adventofcode.aoc2019.Main 1 sample
+        echo "🚀 Running Day 2 with sample input..."
+        java -cp target/classes com.adventofcode.aoc2019.Main 2 sample
         echo "---"
     else
         echo "❌ Compilation failed!"
